@@ -1,0 +1,8 @@
+Create database arthasanjal
+
+Create table headuser(
+ID int primary key auto_increment,
+Email varchar (225),
+PH_numvarchar(10),
+PassW varchar(225)
+)
