@@ -23,7 +23,7 @@ body {
 .section-title {
     font-family: 'Oswald', sans-serif;
     color: white;
-    font-size: 2vw;
+    font-size: 3vw;
     font-weight: 300;
     text-transform: uppercase;
 }
@@ -41,6 +41,7 @@ body {
 .form-wrapper.is-active {
 	animation: showLayer .3s ease-in forwards;
 }
+
 
 @keyframes showLayer {
 	50% {
