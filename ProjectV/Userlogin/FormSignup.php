@@ -25,8 +25,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Invalid email format.";
             exit;
         }
-
-        if (!preg_match('/^\d{10}$/', $phone)) {
+        //Regex for phone number verification
+        if (!preg_match('/(\+977)?[9][6-9]\d{8}$/', $phone)) {
             echo "Phone number must be exactly 10 digits.";
             exit;
         }
@@ -49,7 +49,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $insertStmt->bind_param("sss", $email, $phone, $hashed_password);
 
             if ($insertStmt->execute()) {
-                echo "New record created successfully";
+                header('Location:../FrontPage/Signedup.html');
+                exit();
             } else {
                 echo "Error: " . $insertStmt->error;
             }

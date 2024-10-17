@@ -20,13 +20,17 @@ body {
 	align-items: center;
 }
 
-.section-title {
-    font-family: 'Oswald', sans-serif;
-    color: white;
-    font-size: 3vw;
-    font-weight: 300;
-    text-transform: uppercase;
+.section-title h1 {
+	font-size:26px; font-weight:700;  
+	letter-spacing:1px; 
+	text-transform:uppercase; 
+	width:160px; 
+	text-align:center;
+	 margin:auto; 
+	 white-space:nowrap; 
+	 padding-bottom:13px;
 }
+
 
 .forms {
 	display: flex;
