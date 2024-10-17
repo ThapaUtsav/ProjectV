@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 2</title>
+    <style>
+        body {
+        margin: 0;
+	    font-family: Roboto, -apple-system, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+        background: #3b4465;
+        text-align: center;
+        }
+
+        .container {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .input-field {
+            width: 200px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 10px auto;
+        }
+
+        .add-button {
+
+            padding: 8px 20px;
+            background-color: green;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        h3{
+            font-size: 3vw;
+            color: white;
+        }
+        h4{
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>Add Phone Number</h3>
+    <div class="container">
+        <button class="add-button" onclick="addFn()" id="Button-Limit">Add Input Fields</button>
+        <div id="inputFields">
+            <p id="message"></p>
+        </div>
+    </div>
+    <button class="add-button" type="submit">Submit</button>
+    <h4>Warning: Only 15 members can be added</h4>
+
+    <script>
+        let count = 0;
+        const limit = 15;
+        const button = document.getElementById('Button-Limit');
+        const message = document.getElementById('message');
+
+        function addFn() {
+            if (count < limit) {
+                const divEle = document.getElementById("inputFields");
+                divEle.innerHTML += `
+                    <div>
+                        <input type="text" placeholder="Enter value" class="input-field">
+                        <input type="text" placeholder="Enter value" class="input-field">
+                    </div>
+                `;
+                count++;
+            } else {
+                alert("Limit Reached");
+                button.disabled = true; // Disable the button
+            }
+        }
+    </script>
+</body>
+</html>
