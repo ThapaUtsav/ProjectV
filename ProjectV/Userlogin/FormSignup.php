@@ -39,7 +39,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
-            echo "User already exists with this email or phone number.";
+            echo "<script type='text/javascript'>
+            alert('User Already Exist!');
+            window.location.href = '../Userlogin/userlogin.html';
+            </script>";
         } else {
             // Hashing the password
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
