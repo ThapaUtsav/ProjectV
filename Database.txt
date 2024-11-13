@@ -1,26 +1,10 @@
 Create database arthasanjal
 
-CREATE TABLE headuser (
-    ID INT AUTO_INCREMENT PRIMARY KEY,  
-    Email VARCHAR(225),                 
+CREATE TABLE admin (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+Grp_n
+    Email VARCHAR(50),                 
     PH_num VARCHAR(10),                 
     PassW VARCHAR(225)                  
 );
-CREATE TABLE lowuser (
-    L_U_id INT auto_increment,                        
-    Ph_1 VARCHAR(15),                   
-    Ph_2 VARCHAR(15),
-    Ph_3 VARCHAR(15),
-    Ph_4 VARCHAR(15),
-    Ph_5 VARCHAR(15),
-    FOREIGN KEY (L_U_id) REFERENCES headuser(ID)  
-);
-create table lowuserpassw( 
-L_P_ID int auto_increment, 
-PassW_1 VARCHAR(20),
-PassW_2 VARCHAR(20), 
-PassW_3 VARCHAR(20), 
-PassW_4 VARCHAR(20), 
-PassW_5 VARCHAR(20),  
-FOREIGN KEY (L_P_id) REFERENCES lowuserph(L_U_ID) 
-);
+

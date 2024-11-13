@@ -12,10 +12,12 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['signup-email']) && isset($_POST['signup-Phonenumber']) && isset($_POST['signup-password'])) {
+    if (isset($_POST['Group-name']) && isset($_POST['signup-email']) && isset($_POST['signup-Phonenumber']) && isset($_POST['signup-password'])) {
+        $grp = $_POST['Group-name'];
         $email = $_POST['signup-email'];
         $phone = $_POST['signup-Phonenumber'];
         $password = $_POST['signup-password'];
+
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             echo "Invalid email format.";
             exit;
@@ -24,7 +26,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Phone number must be exactly 10 digits.";
             exit;
         }
-        $checkSql = "SELECT * FROM headuser WHERE Email = ? OR Ph_num = ?";
+
+        $checkSql = "SELECT * FROM admin WHERE Email = ? OR Ph_num = ?";
         $stmt = $conn->prepare($checkSql);
         $stmt->bind_param("ss", $email, $phone);
         $stmt->execute();
@@ -37,16 +40,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </script>";
         } else {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $insertSql = "INSERT INTO headuser (Email, Ph_num, PassW) VALUES (?, ?, ?)";
+            $insertSql = "INSERT INTO headuser (Grp_n, Email, Ph_num, PassW) VALUES (?, ?, ?, ?)";
             $insertStmt = $conn->prepare($insertSql);
-            $insertStmt->bind_param("sss", $email, $phone, $hashed_password);
+            $insertStmt->bind_param("ssss", $grp, $email, $phone, $hashed_password);
             if ($insertStmt->execute()) {
-                header('Location:../FrontPage/Signedup.html');
+                header('Location: ../userlogin.html');
                 exit();
             } else {
                 echo "Error: " . $insertStmt->error;
             }
-            
             $insertStmt->close();
         }
         $stmt->close();
@@ -54,5 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Please fill in all fields.";
     }
 }
+
 $conn->close();
+
 ?>
