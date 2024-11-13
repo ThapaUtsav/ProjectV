@@ -9,3 +9,5 @@ Date:October17=Created Phone number and sign up function(Waiting for Nirajan and
 Date:november9+configure signed up (Finished)
 
 Date: November 12 - Created Admin and Member Home Page
+
+Date:November 13-Assortment and meeting for file management
