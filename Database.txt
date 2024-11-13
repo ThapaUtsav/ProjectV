@@ -2,7 +2,7 @@ Create database arthasanjal
 
 CREATE TABLE admin (
     ID INT AUTO_INCREMENT PRIMARY KEY,
-Grp_n
+    Grp_n VARCHAR(50),
     Email VARCHAR(50),                 
     PH_num VARCHAR(10),                 
     PassW VARCHAR(225)                  
