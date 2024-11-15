@@ -1,26 +1,36 @@
 Create database arthasanjal
 
 CREATE TABLE admin (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    Grp_n VARCHAR(50),
-    Email VARCHAR(50),                 
+    account_number VARCHAR(50) PRIMARY KEY,
+    Grp_n varchar(225),  
+    Email VARCHAR(225),                 
     PH_num VARCHAR(10),                 
     PassW VARCHAR(225)                  
 );
 
-CREATE TABLE user_profiles (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    dob DATE,
-    phone VARCHAR(20),
-    street VARCHAR(255),
-    city VARCHAR(50),
-    state VARCHAR(50),
-    zip VARCHAR(10),
-    accountType ENUM('saving', 'loan') NOT NULL,
-    accDate DATE
-);
 
+CREATE TABLE admins_info (
+    id INT AUTO_INCREMENT PRIMARY KEY,  
+    admin_name VARCHAR(225),                 
+    username VARCHAR(255),                 
+    dob DATE,
+    street VARCHAR(255),
+    city VARCHAR(100),
+    state VARCHAR(100),
+    account_number VARCHAR(50),  -- Add this column
+    FOREIGN KEY (account_number) REFERENCES admin(account_number) 
+);
+CREATE TABLE users (  
+    account_num VARCHAR(50) PRIMARY KEY,  
+    name VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    dob DATE,
+    phone VARCHAR(15),
+    street VARCHAR(255),
+    city VARCHAR(100),
+    state VARCHAR(100),
+    acc_date DATE, 
+    FOREIGN KEY (account_num) REFERENCES admin(account_number)  
+);
