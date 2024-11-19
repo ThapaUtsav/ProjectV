@@ -1,6 +1,6 @@
 <?php
 session_start();
-$admin_account_number = isset($_SESSION['admin_account_number']) ? $_SESSION['admin_account_number'] : '';
+$admin_account_number = isset($_SESSION['acc_no']) ? $_SESSION['acc_no'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -99,8 +99,7 @@ $admin_account_number = isset($_SESSION['admin_account_number']) ? $_SESSION['ad
             <label for="state">State:</label>
             <input type="text" id="state" name="state" required>
 
-            <label for="account_number">Account Number:</label>
-            <input type="hidden" value="<?php echo $_SESSION['admin_account_number']; ?>" id="account_number" name="account_number"  required>
+            <input type="hidden" name="account_number" value="<?php echo htmlspecialchars($admin_account_number); ?>">
 
             <div class="form-actions">
                 <input type="submit" value="Submit Data">

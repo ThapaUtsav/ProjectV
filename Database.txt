@@ -17,7 +17,7 @@ CREATE TABLE admins_info (
     street VARCHAR(255),
     city VARCHAR(100),
     state VARCHAR(100),
-    account_number VARCHAR(50),  -- Add this column
+    account_number VARCHAR(50),  
     FOREIGN KEY (account_number) REFERENCES admin(account_number) 
 );
 CREATE TABLE users (  
@@ -33,4 +33,40 @@ CREATE TABLE users (
     state VARCHAR(100),
     acc_date DATE, 
     FOREIGN KEY (account_num) REFERENCES admin(account_number)  
+);
+CREATE TABLE payments (
+    payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    account_number VARCHAR(50),  
+    date DATE NOT NULL,  
+    payment_amount DECIMAL(10, 2) NOT NULL,  
+    remarks VARCHAR(7), 
+    payment_method VARCHAR(50) NOT NULL,  
+    username VARCHAR(100),  
+    FOREIGN KEY (account_number) REFERENCES admin(account_number)
+);
+
+CREATE TABLE loans (
+    loan_id INT AUTO_INCREMENT PRIMARY KEY,
+    account_number VARCHAR(50),
+    loan_date DATE,               
+    loan_amount DECIMAL(10, 2),  
+    interest_rate DECIMAL(5, 2), 
+    repayment_period INT,       
+    total_repayment DECIMAL(10, 2),  
+    monthly_repayment DECIMAL(10, 2), 
+    status ENUM('Pending', 'Approved', 'Paid') DEFAULT 'Pending',  -- Status of the loan
+    repayment_status ENUM('Pending', 'Partial', 'Paid') DEFAULT 'Pending',  -- Status of repayment
+    payment_method ENUM('mobile', 'banking') NOT NULL,
+    created_by VARCHAR(100),
+    repayment_date DATE,  -- Track the last repayment date (optional)
+    outstanding_balance DECIMAL(10, 2) DEFAULT 0,  -- Track remaining balance
+    FOREIGN KEY (account_number) REFERENCES users(account_num) ON DELETE CASCADE
+);
+
+CREATE TABLE repayments (
+    repayment_id INT AUTO_INCREMENT PRIMARY KEY,
+    loan_id INT,
+    repayment_amount DECIMAL(10, 2),
+    repayment_date DATE,
+    FOREIGN KEY (loan_id) REFERENCES loans(loan_id) ON DELETE CASCADE
 );

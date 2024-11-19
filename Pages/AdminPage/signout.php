@@ -7,6 +7,6 @@ session_unset();
 session_destroy();  
 
 
-header("Location: /PROJECT%20V/Userlogin/userlogin.html");
+header("Location: ../../Userlogin/userlogin.html");
 exit();
 ?>

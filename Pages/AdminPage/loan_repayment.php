@@ -26,7 +26,7 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $loan = $result->fetch_assoc();
 } else {
-    echo "<script>alert('No loan found for this user.'); window.location.href = 'memberpage.html';</script>";
+    echo "<script>alert('No loan found for this user.'); window.location.href = 'admin_page.html';</script>";
     exit;
 }
 
@@ -72,31 +72,37 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loan Repayment</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="memscript.js" defer></script>
+    <link rel="stylesheet" href="adminstyle.css">
+    <script src="script.js" defer></script>
 </head>
 <body class="light-mode">
 
-<div class="sidebar" id="sidebar">
-        <!-- Home and Profile -->
-        <a href="memberpage.html">Home</a>
-        <a href="profile.php">My Profile</a>
-    
-        <!-- Account Information with Submenu -->
-        <a href="javascript:void(0);" onclick="toggleSubmenu('account-information')">Account Information</a>
-        <div class="submenu" id="account-information">
-            <a href="../../userfinance/index.php">Deposit Amount</a>
-            <a href="../../userfinance/loanindex.php">Loan Amount</a>
+    <div class="sidebar" id="sidebar">
+        <a href="admin_page.html">Home</a>
+        <a href="javascript:void(0);" onclick="toggleSubmenu('userManagementSubmenu')">User Management</a>
+        <div class="submenu" id="userManagementSubmenu">
+            <a href="add_user.php">Add New User</a>
+            <a href="userinfo.php">Manage User Information</a>
         </div>
-    
-        <!-- Services with Submenu -->
-        <a href="javascript:void(0);" onclick="toggleSubmenu('services')">Services</a>
-        <div class="submenu" id="services">
-            <a href="reqaccstatement.php">Loan Repayment</a>
+
+        <a href="javascript:void(0);" onclick="toggleSubmenu('accountManagementSubmenu')">Account Management</a>
+        <div class="submenu" id="accountManagementSubmenu">
+            <a href="../../finance/index.php">Deposit Amount</a>
+            <a href="../../finance/loanindex.php">Loan Account Management</a>
         </div>
-    
-        <!-- Support and Sign Out -->
-        <a href="support.php">Support/Help</a>
+
+        <a href="javascript:void(0);" onclick="toggleSubmenu('loanRepaymentSubmenu')">Loan Repayment</a>
+        <div class="submenu" id="loanRepaymentSubmenu">
+            <a href="loan_repayment.php">Manage Loan Repayments</a>
+        </div>
+
+        <a href="javascript:void(0);" onclick="toggleSubmenu('reportsSubmenu')">Reports</a>
+        <div class="submenu" id="reportsSubmenu">
+            <a href="monthlyreport.php">Monthly Reports</a>
+            <a href="annualreport.php">Annual Reports</a>
+        </div>
+
+        <a href="help.php">Support/Help</a>
         <a href="signout.php">Sign Out</a>
     </div>
 
@@ -154,7 +160,7 @@ $conn->close();
         </table>
 
         <h3>Make Repayment</h3>
-        <form action="reqaccstatement.php" method="POST">
+        <form action="loan_repayment.php" method="POST">
             <label for="repayment_amount">Repayment Amount (Max: <?php echo $loan['monthly_repayment']; ?>):</label>
             <input type="number" id="repayment_amount" name="repayment_amount" min="0" max="<?php echo $loan['monthly_repayment']; ?>" step="any" required>
 

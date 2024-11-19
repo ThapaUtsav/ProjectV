@@ -126,10 +126,14 @@ header {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 60px); /* Full viewport height minus the header */
     background: url('logo.png') no-repeat center center;
-    background-size: contain;
+    background-color: white; /* Fallback color */
+    background-size: contain; 
+    background-position: center center; 
     text-align: center;
+    background-attachment: fixed; 
+    min-height: 300px; 
 }
 
 form {

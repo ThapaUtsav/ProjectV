@@ -4,32 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Request Loan</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="adminstyle.css">
     <script src="script.js"></script>
 </head>
 <body class="light-mode">
     <!-- Sidebar Navigation -->
     <div class="sidebar" id="sidebar">
-        <a href="memberpage.php">Home</a>
-        <a href="profile.php">My Profile</a>
-
-        <!-- Account Information with Submenu -->
-        <a href="javascript:void(0);" onclick="toggleSubmenu('account-information')">Account Information</a>
-        <div class="submenu" id="account-information">
-            <a href="savingaccinfo.php">Saving Account Information</a>
-
-            <a href="loanaccinfo.php">Loan Account Information</a>
+        <a href="admin_page.html">Home</a>
+        <a href="javascript:void(0);" onclick="toggleSubmenu('userManagementSubmenu')">User Management</a>
+        <div class="submenu" id="userManagementSubmenu">
+            <a href="add_user.php">Add New User</a>
+            <a href="userinfo.php">Manage User Information</a>
         </div>
-
-        <!-- Services with Submenu -->
-        <a href="javascript:void(0);" onclick="toggleSubmenu('services')">Services</a>
-        <div class="submenu" id="services">
-            <a href="requestloan.php">Request Loan</a>
-            <a href="reqaccstatement.php">Request Account Statement</a>
+        <a href="javascript:void(0);" onclick="toggleSubmenu('accountManagementSubmenu')">Account Management</a>
+        <div class="submenu" id="accountManagementSubmenu">
+            <a href="../../finance/index.php">Deposit Amount</a>
+            <a href="../../finance/loanindex.php">Loan Amount</a>
         </div>
-
-        <a href="support.php">Support/Help</a>
-        <a href="#">Sign Out</a>
+        <a href="javascript:void(0);" onclick="toggleSubmenu('reportsSubmenu')">Reports</a>
+        <div class="submenu" id="reportsSubmenu">
+            <a href="monthlyreport.php">Monthly Reports</a>
+            <a href="annualreport.php">Annual Reports</a>
+        </div>
+        <a href="help.php">Support/Help</a>
+        <a href="signout.php">Sign Out</a>
     </div>
 
     <!-- Header Section -->
@@ -38,7 +36,7 @@
             &#9776;
         </div>
         <div class="nav-links">
-            <a href="#">Notifications</a>
+            <a href="notification.php">Notifications</a>
             <div class="theme-link" onclick="toggleThemeDropdown()">
                 Theme
             </div>

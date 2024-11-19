@@ -5,6 +5,8 @@ $dbname = 'arthasanjal';
 $username = 'root';
 $password = '';
 
+session_start();
+
 $conn = new mysqli($host, $username, $password, $dbname);
 
 if ($conn->connect_error) {
@@ -21,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $phone = $_POST['signup-Phonenumber'];
         $password = $_POST['signup-password'];
         $account_number = $_POST['signup-account_number'];
+        $_SESSION['acc_no'] = $account_number;
 
         // Validate email format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {

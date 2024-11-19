@@ -51,21 +51,4 @@
                 themeDropdown.classList.remove('show');
             }
         });
-        function updateDepositStatus(paymentId, status) {
-            // Create an XMLHttpRequest to send the status change request
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "approve_reject.php", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        
-            // Send the payment ID and the new status (approved or rejected) to the server
-            xhr.send("payment_id=" + paymentId + "&status=" + status);
-        
-            // Once the request is complete, reload the page to reflect changes
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    location.reload();  // Reload to refresh the list of pending deposits
-                } else {
-                    alert("Error updating deposit status");
-                }
-            };
-        }
+   

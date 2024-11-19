@@ -2,9 +2,8 @@
 // Start session
 session_start();
 
-// Check if user is logged in
-if (!isset($_SESSION['userID'])) {
-    // Redirect to login if not logged in
+// Check if the user is logged in by verifying if userID or username is set in session
+if (!isset($_SESSION['userID']) && !isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
@@ -23,13 +22,13 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Get user ID from session
-$userID = $_SESSION['userID'];
+// Get username from session (assuming username is stored in session after login)
+$username = $_SESSION['username'];
 
-// Prepare and execute SQL query to fetch user data
-$sql = "SELECT * FROM users WHERE account_num = ?";
+// Prepare and execute SQL query to fetch user data based on username
+$sql = "SELECT * FROM users WHERE username = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $userID);
+$stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -52,26 +51,32 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Member Page</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
 </head>
 <body class="light-mode">
     <!-- Sidebar Navigation -->
     <div class="sidebar" id="sidebar">
-        <a href="memberpage.php">Home</a>
+        <!-- Home and Profile -->
+        <a href="memberpage.html">Home</a>
         <a href="profile.php">My Profile</a>
+    
+        <!-- Account Information with Submenu -->
         <a href="javascript:void(0);" onclick="toggleSubmenu('account-information')">Account Information</a>
         <div class="submenu" id="account-information">
-            <a href="savingaccinfo.php">Saving Account Information</a>
-            <a href="loanaccinfo.php">Loan Account Information</a>
+            <a href="../../userfinance/index.php">Deposit Amount</a>
+            <a href="../../userfinance/loanindex.php">Loan Amount</a>
         </div>
+    
+        <!-- Services with Submenu -->
         <a href="javascript:void(0);" onclick="toggleSubmenu('services')">Services</a>
         <div class="submenu" id="services">
-            <a href="requestloan.php">Request Loan</a>
-            <a href="reqaccstatement.php">Request Account Statement</a>
+            <a href="reqaccstatement.php">Loan Repayment</a>
         </div>
+    
+        <!-- Support and Sign Out -->
         <a href="support.php">Support/Help</a>
-        <a href="#">Sign Out</a>
+        <a href="signout.php">Sign Out</a>
     </div>
+    
 
     <!-- Header Section -->
     <header>
@@ -79,8 +84,10 @@ $conn->close();
             &#9776;
         </div>
         <div class="nav-links">
-            <a href="notifications.php">Notifications</a>
-            <a href="javascript:void(0);" onclick="toggleThemeDropdown()">Theme</a>
+            <a href="#">Notifications</a>
+            <div class="theme-link" onclick="toggleThemeDropdown()">
+                Theme
+            </div>
             <div class="theme-dropdown" id="theme-dropdown">
                 <a href="#" onclick="switchMode('light')">Light Mode</a>
                 <a href="#" onclick="switchMode('dark')">Dark Mode</a>
@@ -91,7 +98,6 @@ $conn->close();
     <!-- Profile Page Content -->
     <div class="profile-container">
         <h2>Your Profile</h2>
-        <!-- Display user information -->
         <div class="profile-info">
             <p><strong>Name:</strong> <?php echo htmlspecialchars($user['name']); ?></p>
             <p><strong>Username:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
@@ -134,5 +140,6 @@ $conn->close();
             }
         }
     </script>
+    <script src="memscript.js"></script>
 </body>
 </html>

@@ -18,8 +18,6 @@ if ($conn->connect_error) {
 $user = null;
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-
-    // Use prepared statements to prevent SQL injection
     $stmt = $conn->prepare("SELECT * FROM users WHERE account_num = ?");
     $stmt->bind_param("s", $id); // 's' for string (account_num is varchar)
     $stmt->execute();
@@ -28,6 +26,7 @@ if (isset($_GET['id'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Capture form data
     $name = $_POST['name'];
     $username = $_POST['username'];
     $email = $_POST['email'];
@@ -37,8 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $city = $_POST['city'];
     $state = $_POST['state'];
     $acc_date = $_POST['acc_date'];
+    $new_password = $_POST['password']; // New password field
+    $confirm_password = $_POST['confirm_password']; // Confirm password field
 
-    // Sanitize inputs to prevent XSS attacks
+    // Sanitize inputs to prevent XSS and SQL injection
     $name = htmlspecialchars($name);
     $username = htmlspecialchars($username);
     $email = filter_var($email, FILTER_SANITIZE_EMAIL);
@@ -55,15 +56,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
-    // Use prepared statements to update user data securely
+    // Validate password if provided
+    if (!empty($new_password)) {
+        if ($new_password !== $confirm_password) {
+            echo "Passwords do not match.";
+            exit;
+        }
+
+        if (strlen($new_password) < 8) {
+            echo "Password must be at least 8 characters long.";
+            exit;
+        }
+
+        // Hash the password before storing it
+        $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
+    } else {
+        // Retain existing password if no new password is provided
+        $hashed_password = $user['password'];
+    }
+
+    // Prepare the query
     $stmt = $conn->prepare("UPDATE users SET
-        name=?, username=?, email=?, dob=?, phone=?, street=?, city=?, state=?, acc_date=? 
+        name=?, username=?, email=?, dob=?, phone=?, street=?, city=?, state=?, acc_date=?, password=?
         WHERE account_num=?");
 
-    $stmt->bind_param("sssssssssss", $name, $username, $email, $dob, $phone, $street, $city, $state, $acc_date, $id);
+    // Bind parameters
+    $stmt->bind_param("sssssssssss", $name, $username, $email, $dob, $phone, $street, $city, $state, $acc_date, $hashed_password, $id);
 
+    // Execute the statement
     if ($stmt->execute()) {
-        // Redirect to another page after successful update
+        // Redirect after successful update
         header("Location: userinfo.php");
         exit();
     } else {
@@ -81,29 +103,43 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit User</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="adminstyle.css">
     <script src="script.js"></script>
     <script src="formvalidation.js"></script>
 </head>
 <body class="light-mode">
     <!-- Sidebar Navigation -->
     <div class="sidebar" id="sidebar">
-        <a href="adminpage.php">Home</a>
+        <a href="admin_page.html">Home</a>
+
+        <!-- User Management Section -->
         <a href="javascript:void(0);" onclick="toggleSubmenu('userManagementSubmenu')">User Management</a>
         <div class="submenu" id="userManagementSubmenu">
-            <a href="adduser.php">Add New User</a>
+            <a href="add_user.php">Add New User</a>
             <a href="userinfo.php">Manage User Information</a>
         </div>
-        <a href="#" onclick="toggleSubmenu('accountManagementSubmenu')">Account Management</a>
+
+        <!-- Account Management Section -->
+        <a href="javascript:void(0);" onclick="toggleSubmenu('accountManagementSubmenu')">Account Management</a>
         <div class="submenu" id="accountManagementSubmenu">
-            <a href="savingaccount.php">Saving Account Management</a>
-            <a href="loanaccount.php">Loan Account Management</a>
+            <a href="../../finance/index.php">Deposit Amount</a>
+            <a href="../../finance/loanindex.php">Loan Account Management</a>
         </div>
-        <a href="#" onclick="toggleSubmenu('reportsSubmenu')">Reports</a>
+
+        <!-- Loan Repayment Section -->
+        <a href="javascript:void(0);" onclick="toggleSubmenu('loanRepaymentSubmenu')">Loan Repayment</a>
+        <div class="submenu" id="loanRepaymentSubmenu">
+            <a href="loan_repayment.php">Manage Loan Repayments</a>
+        </div>
+
+        <!-- Reports Section -->
+        <a href="javascript:void(0);" onclick="toggleSubmenu('reportsSubmenu')">Reports</a>
         <div class="submenu" id="reportsSubmenu">
             <a href="monthlyreport.php">Monthly Reports</a>
             <a href="annualreport.php">Annual Reports</a>
         </div>
+
+        <!-- Support and Sign Out -->
         <a href="help.php">Support/Help</a>
         <a href="signout.php">Sign Out</a>
     </div>
@@ -114,7 +150,7 @@ $conn->close();
             &#9776;
         </div>
         <div class="nav-links">
-            <a href="#">Notifications</a>
+            <a href="notification.php">Notifications</a>
             <div class="theme-link" onclick="toggleThemeDropdown()">
                 Theme
             </div>
@@ -126,7 +162,7 @@ $conn->close();
     </header>
 
     <!-- Form Area -->
-    <form action="edit_user.php" method="POST">
+    <form action="edit_user.php?id=<?php echo htmlspecialchars($user['account_num']); ?>" method="POST">
         <div class="subpage">
             <h1>Edit User Profile</h1>
 
@@ -161,6 +197,14 @@ $conn->close();
 
             <label>Created On:</label>
             <input type="date" name="acc_date" value="<?php echo $user['acc_date']; ?>">
+
+            <!-- Password Section -->
+            <h2>Change Password (Optional)</h2>
+            <label>New Password:</label>
+            <input type="password" name="password" placeholder="Enter new password (optional)">
+
+            <label>Confirm New Password:</label>
+            <input type="password" name="confirm_password" placeholder="Confirm new password (optional)">
 
             <!-- Submit Button -->
             <button type="submit">Submit</button>
