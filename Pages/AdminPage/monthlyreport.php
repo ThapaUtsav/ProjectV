@@ -68,6 +68,7 @@ $usernamesResult = $conn->query($usernamesSql);
     <!-- Sidebar Navigation -->
     <div class="sidebar" id="sidebar">
         <a href="admin_page.html">Home</a>
+
         <!-- User Management Section -->
         <a href="javascript:void(0);" onclick="toggleSubmenu('userManagementSubmenu')">User Management</a>
         <div class="submenu" id="userManagementSubmenu">
@@ -78,14 +79,14 @@ $usernamesResult = $conn->query($usernamesSql);
         <!-- Account Management Section -->
         <a href="javascript:void(0);" onclick="toggleSubmenu('accountManagementSubmenu')">Account Management</a>
         <div class="submenu" id="accountManagementSubmenu">
-            <a href="../../finance/index.php">Deposit Amount</a>
-            <a href="../../finance/loanindex.php">Loan Account Management</a>
+            <a href="../../finance/index.php">Deposit </a>
+            <a href="../../finance/loanindex.php">Loan </a>
         </div>
 
         <!-- Loan Repayment Section -->
-        <a href="javascript:void(0);" onclick="toggleSubmenu('loanRepaymentSubmenu')">Loan Repayment</a>
+        <a href="javascript:void(0);" onclick="toggleSubmenu('loanRepaymentSubmenu')">Repayment</a>
         <div class="submenu" id="loanRepaymentSubmenu">
-            <a href="loan_repayment.php">Manage Loan Repayments</a>
+            <a href="loan_repayment.php">Loan Repayments</a>
         </div>
 
         <!-- Reports Section -->
@@ -141,12 +142,11 @@ $usernamesResult = $conn->query($usernamesSql);
 
             <label for="year">Select Year:</label>
             <select name="year" id="year">
-                <!-- Always show the current year as the default -->
                 <option value="<?php echo date('Y'); ?>" <?php if ($selectedYear == date('Y')) echo 'selected'; ?>><?php echo date('Y'); ?></option>
-                <!-- Show previous year -->
+
                 <option value="<?php echo date('Y') - 1; ?>" <?php if ($selectedYear == date('Y') - 1) echo 'selected'; ?>><?php echo date('Y') - 1; ?></option>
-                <!-- Show next year -->
-                <option value="<?php echo date('Y') + 1; ?>" <?php if ($selectedYear == date('Y') + 1) echo 'selected'; ?>><?php echo date('Y') + 1; ?></option>
+
+                <option value="<?php echo date('Y') + 1; ?>" <?php if ($selectedYear == date('Y') + 1) echo 'selected'; ?>><?php echo date('Y') - 2; ?></option>
             </select>
 
             <label for="username">Select Username:</label>
@@ -199,10 +199,6 @@ $usernamesResult = $conn->query($usernamesSql);
         </table>
     </div>
 
-    <!-- Footer Section -->
-    <footer>
-        &copy; <?php echo date("Y"); ?> Artha Sanjal. All rights reserved.
-    </footer>
 
     <script src="script.js">
     </script>

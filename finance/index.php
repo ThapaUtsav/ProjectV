@@ -39,7 +39,7 @@ if (isset($_SESSION['deposit_message'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Payment Table</title>
-  <link rel="stylesheet" href="finstyle.css">
+  <link rel="stylesheet" href="indexstyle.css">
   <script src="script.js"></script>
 </head>
 <body class="light-mode">
@@ -91,7 +91,7 @@ if (isset($_SESSION['deposit_message'])) {
         <label for="payment">Payment Amount:</label>
         <input type="number" id="payment" name="payment_amount" required>
         
-        <label for="payment_method">Payment Method:</label>
+        <label for="payment_method">Payment Method:</label><br>
         <select id="payment_method" name="payment_method" required>
             <option value="mobile">Mobile</option>
             <option value="banking">Banking</option>

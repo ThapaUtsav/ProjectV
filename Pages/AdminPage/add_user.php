@@ -1,6 +1,9 @@
 <?php
 session_start();
 $userID = isset($_SESSION['userID']) ? $_SESSION['userID'] : '';
+
+// Get today's date in the format yyyy-mm-dd
+$todayDate = date('Y-m-d');
 ?>
 
 <!DOCTYPE html>
@@ -28,14 +31,14 @@ $userID = isset($_SESSION['userID']) ? $_SESSION['userID'] : '';
         <!-- Account Management Section -->
         <a href="javascript:void(0);" onclick="toggleSubmenu('accountManagementSubmenu')">Account Management</a>
         <div class="submenu" id="accountManagementSubmenu">
-            <a href="../../finance/index.php">Deposit Amount</a>
-            <a href="../../finance/loanindex.php">Loan Account Management</a>
+            <a href="../../finance/index.php">Deposit </a>
+            <a href="../../finance/loanindex.php">Loan </a>
         </div>
 
         <!-- Loan Repayment Section -->
-        <a href="javascript:void(0);" onclick="toggleSubmenu('loanRepaymentSubmenu')">Loan Repayment</a>
+        <a href="javascript:void(0);" onclick="toggleSubmenu('loanRepaymentSubmenu')">Repayment</a>
         <div class="submenu" id="loanRepaymentSubmenu">
-            <a href="loan_repayment.php">Manage Loan Repayments</a>
+            <a href="loan_repayment.php">Loan Repayments</a>
         </div>
 
         <!-- Reports Section -->
@@ -66,7 +69,7 @@ $userID = isset($_SESSION['userID']) ? $_SESSION['userID'] : '';
             </div>
         </div>
     </header>
-    </header>
+
     <!-- Form Area -->
     <form action="manage_user.php" method="POST">
         <div class="subpage">
@@ -103,22 +106,18 @@ $userID = isset($_SESSION['userID']) ? $_SESSION['userID'] : '';
             <label for="state">State:</label>
             <input type="text" id="state" name="state" required>
 
-            <!-- Pre-filled Account Number -->
+
             <label for="accnumber">Account Number:</label>
             <input type="text" id="accnumber" name="accnumber" value="<?php echo $_SESSION['userID']; ?>" readonly>
 
-            <label for="accDate">Created On:</label>
-            <input type="date" id="accDate" name="accDate">
 
-            <!-- Submit Button -->
+            <label for="accDate">Created On:</label>
+            <input type="date" id="accDate" name="accDate" value="<?php echo $todayDate; ?>" readonly>
+
             <button type="submit">Submit</button>
         </div>
     </form>
 
-    <!-- Footer Section -->
-    <footer>
-        &copy; <?php echo date("Y");?> Artha Sanjal. All rights reserved.
-    </footer>
     
 </body>
 </html>

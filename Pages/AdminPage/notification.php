@@ -70,14 +70,14 @@ $conn->close();
         <!-- Account Management Section -->
         <a href="javascript:void(0);" onclick="toggleSubmenu('accountManagementSubmenu')">Account Management</a>
         <div class="submenu" id="accountManagementSubmenu">
-            <a href="../../finance/index.php">Deposit Amount</a>
-            <a href="../../finance/loanindex.php">Loan Account Management</a>
+            <a href="../../finance/index.php">Deposit </a>
+            <a href="../../finance/loanindex.php">Loan </a>
         </div>
 
         <!-- Loan Repayment Section -->
-        <a href="javascript:void(0);" onclick="toggleSubmenu('loanRepaymentSubmenu')">Loan Repayment</a>
+        <a href="javascript:void(0);" onclick="toggleSubmenu('loanRepaymentSubmenu')">Repayment</a>
         <div class="submenu" id="loanRepaymentSubmenu">
-            <a href="loan_repayment.php">Manage Loan Repayments</a>
+            <a href="loan_repayment.php">Loan Repayments</a>
         </div>
 
         <!-- Reports Section -->
@@ -135,7 +135,7 @@ $conn->close();
                                 <td><?php echo htmlspecialchars($deposit['payment_amount']); ?></td>
                                 <td><?php echo htmlspecialchars($deposit['payment_method']); ?></td>
                                 <td>
-                                    <form method="post" action="../../Pages/MemberPage/approve_reject.php">
+                                    <form method="post" action="approve_reject.php">
                                         <input type="hidden" name="payment_id" value="<?php echo $deposit['payment_id']; ?>">
                                         <button type="submit" name="status" value="approved" class="btn approve-btn">Approve</button>
                                         <button type="submit" name="status" value="rejected" class="btn reject-btn">Reject</button>

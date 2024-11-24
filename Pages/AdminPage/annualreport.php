@@ -83,14 +83,14 @@ $payments = $result->num_rows > 0 ? $result->fetch_all(MYSQLI_ASSOC) : [];
         <!-- Account Management Section -->
         <a href="javascript:void(0);" onclick="toggleSubmenu('accountManagementSubmenu')">Account Management</a>
         <div class="submenu" id="accountManagementSubmenu">
-            <a href="../../finance/index.php">Deposit Amount</a>
-            <a href="../../finance/loanindex.php">Loan Account Management</a>
+            <a href="../../finance/index.php">Deposit </a>
+            <a href="../../finance/loanindex.php">Loan </a>
         </div>
 
         <!-- Loan Repayment Section -->
-        <a href="javascript:void(0);" onclick="toggleSubmenu('loanRepaymentSubmenu')">Loan Repayment</a>
+        <a href="javascript:void(0);" onclick="toggleSubmenu('loanRepaymentSubmenu')">Repayment</a>
         <div class="submenu" id="loanRepaymentSubmenu">
-            <a href="loan_repayment.php">Manage Loan Repayments</a>
+            <a href="loan_repayment.php">Loan Repayments</a>
         </div>
 
         <!-- Reports Section -->

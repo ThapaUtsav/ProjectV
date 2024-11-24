@@ -28,6 +28,7 @@ $sql = "
     FROM loans 
     JOIN users ON loans.account_number = users.account_num 
     WHERE loans.account_number = ? 
+    AND loans.status != 'Paid'  -- Exclude loans that are 'Paid'
     ORDER BY loans.loan_date DESC
 ";
 
@@ -115,7 +116,7 @@ $conn->close();
             <h2>Loan Notifications</h2>
             
             <?php if (empty($loans)): ?>
-                <p>You have no loan requests at the moment.</p>
+                <p>You have no loan for query at the  moment.</p>
             <?php else: ?>
                 <table class="table">
                     <thead>
@@ -130,18 +131,17 @@ $conn->close();
                     <tbody>
                         <?php foreach ($loans as $loan): ?>
                             <tr>
-                                <!-- Display the username of the loan requester -->
                                 <td><?php echo htmlspecialchars($loan['created_by']); ?></td>
                                 <td><?php echo htmlspecialchars($loan['loan_amount']); ?></td>
                                 <td><?php echo htmlspecialchars($loan['loan_date']); ?></td>
                                 <td>
                                     <?php
                                     if ($loan['status'] == 'Pending') {
-                                        echo "<span class='status-pending'>Pending</span>"; // Loan is pending approval
+                                        echo "<span class='status-pending'>Pending</span>"; 
                                     } elseif ($loan['status'] == 'Approved') {
-                                        echo "<span class='status-approved'>Approved</span>"; // Loan has been approved
+                                        echo "<span class='status-approved'>Approved</span>"; 
                                     } elseif ($loan['status'] == 'Rejected') {
-                                        echo "<span class='status-rejected'>Rejected</span>"; // Loan was rejected
+                                        echo "<span class='status-rejected'>Rejected</span>"; 
                                     }
                                     ?>
                                 </td>
@@ -154,8 +154,5 @@ $conn->close();
         </div>
     </main>
 
-    <footer>
-        &copy; <?php echo date("Y"); ?> Artha Sanjal. All rights reserved.
-    </footer>
 </body>
 </html>
