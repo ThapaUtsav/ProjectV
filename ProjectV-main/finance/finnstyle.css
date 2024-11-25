@@ -1,0 +1,318 @@
+/* Basic reset to remove margin/padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Light and Dark Mode */
+body.light-mode {
+  background-color: white;
+  color: #333;
+}
+
+body.dark-mode {
+  background-color: #333;
+  color: #fff;
+}
+
+/* Header Styling */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #2c3e50;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hamburger-menu {
+  cursor: pointer;
+  font-size: 30px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.nav-links a:hover {
+  color: #1abc9c;
+}
+
+/* Sidebar Styling */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  height: 100%;
+  width: 250px;
+  background-color: #34495e;
+  color: white;
+  padding-top: 60px;
+  transition: 0.3s;
+  z-index: 1000;
+}
+
+.sidebar.show {
+  left: 0;
+}
+
+.sidebar a {
+  display: block;
+  padding: 15px 20px;
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.sidebar a:hover {
+  background-color: #1abc9c;
+}
+
+.submenu {
+  display: none;
+  background-color: #2c3e50;
+}
+
+.submenu a {
+  padding-left: 40px;
+  font-size: 16px;
+}
+
+.submenu a:hover {
+  background-color: #1abc9c;
+}
+
+/* Main Content Area */
+main {
+  margin-left: 270px;
+  padding: 30px;
+  flex-grow: 1;
+  transition: margin-left 0.3s;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Loan Form Styling */
+#loanForm {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  margin: 50px auto;
+  transition: transform 0.3s ease-in-out;
+}
+
+#loanForm label {
+  font-size: 1rem;
+  margin-top: 15px;
+  display: block;
+  color: #333;
+}
+
+#loanForm input[type="date"],
+#loanForm input[type="number"],
+#loanForm input[type="text"],
+#loanForm select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+}
+
+#loanForm input[type="number"]:focus,
+#loanForm input[type="date"]:focus,
+#loanForm select:focus {
+  border-color: #1abc9c;
+}
+
+#loanForm button {
+  background-color: #1abc9c;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  margin-top: 20px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+#loanForm button:hover {
+  background-color: #16a085;
+}
+
+/* Loan Calculation Fields */
+#loanForm input[readonly] {
+  background-color: #f1f1f1;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Footer Styling */
+footer {
+  text-align: center;
+  padding: 15px;
+  background-color: #2c3e50;
+  color: white;
+  margin-top: auto;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .hamburger-menu {
+    font-size: 28px;
+  }
+
+  header {
+    margin-left: 200px;
+  }
+
+  #loanForm {
+    max-width: 100%;
+    margin: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 150px;
+  }
+
+  header {
+    margin-left: 150px;
+  }
+
+  .hamburger-menu {
+    font-size: 24px;
+  }
+
+  #loanForm {
+    margin: 15px;
+  }
+}
+
+/* Table Styles for Loan Accounts */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 30px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+table th, table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+table th {
+  background-color: #2c3e50;
+  color: white;
+  font-weight: bold;
+}
+
+table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table tr:hover {
+  background-color: #f1f1f1;
+}
+
+table td a {
+  color: #1abc9c;
+  text-decoration: none;
+}
+
+table td a:hover {
+  text-decoration: underline;
+}
+
+/* Loan Status Styling */
+table .status {
+  padding: 8px 15px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+table .status.active {
+  background-color: #2ecc71;
+  color: white;
+}
+
+table .status.pending {
+  background-color: #f39c12;
+  color: white;
+}
+
+table .status.completed {
+  background-color: #3498db;
+  color: white;
+}
+
+table .status.failed {
+  background-color: #e74c3c;
+  color: white;
+}
+
+/* Pagination for Loan Accounts (Optional) */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination a {
+  padding: 8px 16px;
+  margin: 0 5px;
+  background-color: #1abc9c;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.pagination a:hover {
+  background-color: #16a085;
+}
+
+.pagination .active {
+  background-color: #16a085;
+}
