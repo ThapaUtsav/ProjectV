@@ -161,15 +161,10 @@ $conn->close();
 
             <!-- Submit Button -->
             <button type="submit">Submit</button>
-            <!-- Delete User Button -->
-            <button type="button" onclick="return confirmDelete()">Delete User</button>
         </div>
     </form>
 
-    <!-- Footer Section -->
-    <footer>
-        &copy; <?php echo date("Y"); ?> Artha Sanjal. All rights reserved.
-    </footer>
+
 
 </body>
 </html>

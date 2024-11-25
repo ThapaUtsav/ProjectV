@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result->num_rows > 0) {
             echo "<script type='text/javascript'>
             alert('User Already Exists!');
-            window.location.href = '../Userlogin/userlogin.html';
+            window.location.href = '../Userlogin/userlogin.php';
             </script>";
             exit;
         } else {

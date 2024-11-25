@@ -11,22 +11,21 @@
     <!-- Sidebar Navigation -->
     <div class="sidebar" id="sidebar">
         <!-- Home and Profile -->
-        <div class="sidebar" id="sidebar">
-        <!-- Home and Profile -->
         <a href="memberpage.html">Home</a>
         <a href="profile.php">My Profile</a>
     
         <!-- Account Information with Submenu -->
         <a href="javascript:void(0);" onclick="toggleSubmenu('account-information')">Account Information</a>
         <div class="submenu" id="account-information">
-            <a href="../../userfinance/index.php">Deposit Amount</a>
-            <a href="../../userfinance/loanindex.php">Loan Amount</a>
+            <a href="../../userfinance/index.php">Deposit </a>
+            <a href="../../userfinance/loanindex.php">Loan </a>
         </div>
     
         <!-- Services with Submenu -->
         <a href="javascript:void(0);" onclick="toggleSubmenu('services')">Services</a>
         <div class="submenu" id="services">
             <a href="reqaccstatement.php">Loan Repayment</a>
+            <a href="DepHist.php">Deposit History</a>
         </div>
     
         <!-- Support and Sign Out -->

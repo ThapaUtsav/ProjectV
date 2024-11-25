@@ -186,8 +186,5 @@ $conn->close();
         </div>
     </main>
 
-    <footer>
-        &copy; <?php echo date("Y"); ?> Artha Sanjal. All rights reserved.
-    </footer>
 </body>
 </html>

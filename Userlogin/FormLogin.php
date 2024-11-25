@@ -27,27 +27,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $inputPassword = $conn->real_escape_string($inputPassword);
 
     // First, check if the phone number exists in the admin table
-    $sql_admin = "SELECT account_number, PassW FROM admin WHERE PH_num = ? LIMIT 1"; 
-    $stmt_admin = $conn->prepare($sql_admin);
-    $stmt_admin->bind_param("s", $phoneNumber);
-    $stmt_admin->execute();
-    $result_admin = $stmt_admin->get_result();
+    $sql_admin = "SELECT account_number, PassW FROM admin WHERE PH_num = '$phoneNumber' LIMIT 1";
+    $result_admin = $conn->query($sql_admin);
 
-    if ($result_admin->num_rows > 0) {
+    if ($result_admin && $result_admin->num_rows > 0) {
         $admin = $result_admin->fetch_assoc();
         // Check the password
         if (password_verify($inputPassword, $admin['PassW'])) {
             // Fetch the username from the admins_info table
-            $sql_admin_info = "SELECT username FROM admins_info WHERE account_number = ? LIMIT 1";
-            $stmt_admin_info = $conn->prepare($sql_admin_info);
-            $stmt_admin_info->bind_param("s", $admin['account_number']);
-            $stmt_admin_info->execute();
-            $result_admin_info = $stmt_admin_info->get_result();
+            $sql_admin_info = "SELECT username FROM admins_info WHERE account_number = '$admin[account_number]' LIMIT 1";
+            $result_admin_info = $conn->query($sql_admin_info);
 
-            if ($result_admin_info->num_rows > 0) {
+            if ($result_admin_info && $result_admin_info->num_rows > 0) {
                 $admin_info = $result_admin_info->fetch_assoc();
                 session_regenerate_id(true);  // Regenerate session ID to prevent session fixation
-                $_SESSION['userID'] = $admin['account_number'];  
+                $_SESSION['userID'] = $admin['account_number'];
                 $_SESSION['role'] = 'admin';
                 $_SESSION['username'] = $admin_info['username'];  // Store the admin username in the session
 
@@ -57,20 +51,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $errorMessage = "Admin username not found.";
             }
 
-            // Close the statement for fetching admin username
-            $stmt_admin_info->close();
+            // Close the result for fetching admin username
+            $result_admin_info->free();
         } else {
             $errorMessage = "Incorrect password for admin. Please try again.";
         }
     } else {
         // If admin login fails, check the users table
-        $sql_user = "SELECT account_num, password, username FROM users WHERE phone = ? LIMIT 1";  // Added `username` to SELECT query
-        $stmt_user = $conn->prepare($sql_user);
-        $stmt_user->bind_param("s", $phoneNumber);
-        $stmt_user->execute();
-        $result_user = $stmt_user->get_result();
+        $sql_user = "SELECT account_num, password, username FROM users WHERE phone = '$phoneNumber' LIMIT 1";
+        $result_user = $conn->query($sql_user);
 
-        if ($result_user->num_rows > 0) {
+        if ($result_user && $result_user->num_rows > 0) {
             // User found, check the password
             $user = $result_user->fetch_assoc();
             if (password_verify($inputPassword, $user['password'])) {
@@ -85,15 +76,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $errorMessage = "Incorrect password for user. Please try again.";
             }
         } else {
-            $errorMessage = "No user found with this phone number.";
+            // If no admin and no user is found, redirect with error code in the URL
+            header("Location: userLogin.php?error=userNotFound");
+            exit;  // Exit to ensure no further code execution
         }
 
-        // Close the statement for fetching user info
-        $stmt_user->close();
+        // Close the result for fetching user info
+        $result_user->free();
     }
 
-    // Close prepared statements for admin login check
-    $stmt_admin->close();
+    // Close the result for admin login check
+    $result_admin->free();
 }
 
 // Close the database connection
@@ -103,4 +96,3 @@ $conn->close();
 if (!empty($errorMessage)) {
     echo "<p>Error: $errorMessage</p>";
 }
-?>

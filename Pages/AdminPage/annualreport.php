@@ -33,7 +33,7 @@ $usernames = [];
 if ($usernameResult->num_rows > 0) {
     while ($row = $usernameResult->fetch_assoc()) {
         $usernames[] = $row['username'];
-}
+    }
 }
 
 // Check if a year is selected from the form
@@ -153,7 +153,7 @@ $payments = $result->num_rows > 0 ? $result->fetch_all(MYSQLI_ASSOC) : [];
                 ?>
             </select>
 
-            <input type="submit" value="Search">
+            <button type="submit">View Report</button>
         </form>
 
         <!-- Table to display report -->
@@ -189,11 +189,6 @@ $payments = $result->num_rows > 0 ? $result->fetch_all(MYSQLI_ASSOC) : [];
         </table>
     </div>
 
-    <!-- Footer Section -->
-    <footer>
-        &copy; <?php echo date("Y"); ?> Artha Sanjal. All rights reserved.
-    </footer>
-
     <script>
         // Toggle Sidebar
         function toggleSidebar() {
@@ -220,6 +215,7 @@ $payments = $result->num_rows > 0 ? $result->fetch_all(MYSQLI_ASSOC) : [];
             }
         }
     </script>
+
 </body>
 <script src="script.js"></script>
 </html>

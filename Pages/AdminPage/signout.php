@@ -7,6 +7,6 @@ session_unset();
 session_destroy();  
 
 
-header("Location: ../../Userlogin/userlogin.html");
+header("Location: ../../Userlogin/userlogin.php");
 exit();
 ?>

@@ -32,7 +32,7 @@ $result = $conn->query($sql);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Loan Deposit and Management</title>
-  <link rel="stylesheet" href="finnstyle.css">
+  <link rel="stylesheet" href="indexstyle.css">
   <script src="script.js"></script>
 </head>
 <body class="light-mode">
@@ -90,11 +90,11 @@ $result = $conn->query($sql);
             <label for="repayment_period">Repayment Period (Months):</label>
             <input type="number" id="repayment_period" name="repayment_period" required>
 
-            <label for="payment_method">Payment Method:</label>
+            <label for="payment_method">Payment Method:</label><br>
             <select id="payment_method" name="payment_method" required>
                 <option value="mobile">Mobile</option>
                 <option value="banking">Banking</option>
-            </select>
+            </select><br>
 
             <label for="total_repayment">Total Repayment (with interest):</label>
             <input type="text" id="total_repayment" name="total_repayment" readonly>
@@ -149,9 +149,6 @@ $result = $conn->query($sql);
         </div>
     </div>
 
-    <footer>
-        &copy; <?php echo date("Y"); ?> Artha Sanjal. All rights reserved.
-    </footer>
 
     <script>
         document.getElementById("loan_amount").addEventListener("input", calculateLoan);
