@@ -1,0 +1,452 @@
+/* Basic styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Light and dark mode colors */
+body.light-mode {
+    background-color: white;
+    color: darkgray;
+}
+
+body.dark-mode {
+    background-color: darkgray;
+    color: white;
+}
+p{
+    align-content: center;
+}
+/* Header styling */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: dimgray;
+    color: white;
+}
+
+/* Sidebar styling */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    height: 100%;
+    width: 250px;
+    background-color: gray; 
+    color: white; 
+    padding-top: 60px;
+    transition: 0.3s;
+}
+
+/* Sidebar visible state */
+.sidebar.show {
+    left: 0;
+}
+
+/* Sidebar links */
+.sidebar a {
+    display: block;
+    padding: 15px 20px;
+    color: white; 
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.sidebar a:hover {
+    background-color: silver; 
+}
+
+/* Submenu styling */
+.submenu {
+    display: none;
+    background-color: gray;
+}
+
+.submenu a {
+    padding-left: 40px;
+    font-size: 16px;
+    color: white;
+}
+
+.submenu a:hover {
+    background-color: silver;
+}
+
+/* Hamburger icon */
+.hamburger-menu {
+    cursor: pointer;
+    font-size: 24px;
+}
+
+/* Top right navigation */
+.nav-links {
+    display: flex;
+    gap: 20px;
+    position: relative;
+}
+
+.nav-links a {
+    color: white; 
+    text-decoration: none;
+}
+
+/* Theme dropdown */
+.theme-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: dimgray;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.theme-dropdown a {
+    display: block;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+}
+
+.theme-dropdown a:hover {
+    background-color: darkgray;
+}
+
+.theme-dropdown.show {
+    display: block;
+}
+
+/* Home area with background */
+.home-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 60px); /* Full viewport height minus the header */
+    background: url('logo.png') no-repeat center center;
+    background-color: white; /* Fallback color */
+    background-size: contain; 
+    background-position: center center; 
+    text-align: center;
+    background-attachment: fixed; 
+    min-height: 300px; 
+}
+
+form {
+    max-width: 100%;
+    margin: auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+h1, h2 {
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.subpage {
+    margin-bottom: 20px;
+}
+
+label {
+    display: inline-block;
+    width: 150px;
+    margin-bottom: 10px;
+    font-family: Arial, sans-serif;
+}
+
+input, select {
+    width: calc(100% - 160px);
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: dimgray; 
+    color: white; 
+}
+
+/* Transaction and Repayment History Table Styles */
+.transaction-history, .repayment-history {
+    background-color: #f9f9f9; /* Light mode background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+body.dark-mode .transaction-history, 
+body.dark-mode .repayment-history {
+    background-color: #444; /* Dark mode background */
+    color: #fff;
+}
+
+.transaction-history h2, .repayment-history h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+body.dark-mode .transaction-history h2, 
+body.dark-mode .repayment-history h2 {
+    color: #fff;
+}
+
+.transaction-history table, .repayment-history table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.transaction-history th, .repayment-history th,
+.transaction-history td, .repayment-history td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+body.dark-mode .transaction-history th, 
+body.dark-mode .repayment-history th,
+body.dark-mode .transaction-history td, 
+body.dark-mode .repayment-history td {
+    border-color: #555;
+}
+
+.transaction-history th, .repayment-history th {
+    background-color: #24bfd7; /* Header color */
+    color: white;
+    font-weight: bold;
+}
+
+body.dark-mode .transaction-history th, 
+body.dark-mode .repayment-history th {
+    background-color: #333; /* Dark mode header color */
+}
+
+.transaction-history tr:nth-child(even), .repayment-history tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+body.dark-mode .transaction-history tr:nth-child(even), 
+body.dark-mode .repayment-history tr:nth-child(even) {
+    background-color: #555;
+}
+
+/* Profile, Address, and Account Sections */
+.profile-info-section, .address-section, .account-status-section, .change-password-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .profile-info-section, 
+body.dark-mode .address-section, 
+body.dark-mode .account-status-section, 
+body.dark-mode .change-password-section {
+    background-color: #444;
+    color: #fff;
+}
+ /*subpage section*/
+.subpage {
+    text-align: center;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .subpage {
+    background-color: #444;
+    color: #fff;
+}
+
+.subpage h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.subpage form label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.subpage form input,
+.subpage form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+body.dark-mode .subpage form input,
+body.dark-mode .subpage form textarea {
+    border-color: #555;
+    background-color: #666;
+    color: #fff;
+}
+
+.subpage form button {
+    background-color: #24bfd7;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.subpage form button:hover {
+    background-color: #1a9db6;
+}
+
+.subpage p {
+    margin: 10px 0;
+}
+/* General Styling for Notifications Page */
+body.light-mode {
+    background-color: #f9f9f9;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+}
+
+body.dark-mode {
+    background-color: #121212;
+    color: #fff;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.table thead {
+    background-color: #24bfd7;
+    color: white;
+}
+
+.table th, .table td {
+    padding: 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* General Styling for Notifications Page */
+body.light-mode {
+    background-color: #f9f9f9;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+}
+
+body.dark-mode {
+    background-color: #121212;
+    color: #fff;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border: 2px solid #ddd; /* Add a border around the entire table */
+    border-radius: 8px; /* Optional: For rounded corners on the table */
+}
+
+.table thead {
+    background-color: #24bfd7;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+}
+
+.table th, .table td {
+    padding: 15px;
+    text-align: left;
+    border: 1px solid #ddd; /* Border for each table cell */
+}
+
+.table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Status Styles */
+.status-pending {
+    color: orange;
+    font-weight: bold;
+}
+
+.status-approved {
+    color: green;
+    font-weight: bold;
+}
+
+.status-rejected {
+    color: red;
+    font-weight: bold;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+}
