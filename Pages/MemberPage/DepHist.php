@@ -36,6 +36,16 @@ if ($month && $year) {
 $sql .= " ORDER BY date DESC";  // Order by most recent deposit
 
 $result = $conn->query($sql);
+
+// Calculate total deposit based on the filter
+$total_sql = $sql; // Same as the main query
+$total_result = $conn->query($total_sql);
+$total_deposit = 0;
+if ($total_result && $total_result->num_rows > 0) {
+    while ($row = $total_result->fetch_assoc()) {
+        $total_deposit += $row['payment_amount'];
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -47,15 +57,33 @@ $result = $conn->query($sql);
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="light-mode">
+<div class="sidebar" id="sidebar">
+        <a href="memberpage.html">Home</a>
+        <a href="profile.php">My Profile</a>
+    
+        <a href="javascript:void(0);" onclick="toggleSubmenu('account-information')">Account Information</a>
+        <div class="submenu" id="account-information">
+            <a href="../../userfinance/index.php">Deposit </a>
+            <a href="../../userfinance/loanindex.php">Loan </a>
+        </div>
+    
+        <a href="javascript:void(0);" onclick="toggleSubmenu('services')">Services</a>
+        <div class="submenu" id="services">
+            <a href="reqaccstatement.php">Loan Repayment</a>
+            <a href="DepHist.php">Deposit History</a>
+        </div>
+    
+        <a href="support.php">Support/Help</a>
+        <a href="signout.php">Sign Out</a>
+    </div>
+
     <header>
         <div class="hamburger-menu" onclick="toggleSidebar()">
             &#9776;
         </div>
         <div class="nav-links">
             <a href="notification.php">Notifications</a>
-            <div class="theme-link" onclick="toggleThemeDropdown()">
-                Theme
-            </div>
+            <div class="theme-link" onclick="toggleThemeDropdown()">Theme</div>
             <div class="theme-dropdown" id="theme-dropdown">
                 <a href="#" onclick="switchMode('light')">Light Mode</a>
                 <a href="#" onclick="switchMode('dark')">Dark Mode</a>
@@ -63,9 +91,8 @@ $result = $conn->query($sql);
         </div>
     </header>
 
-    <div class="home-area">
+    <div class="subpage">
         <h1>Deposit History</h1>
-        <!-- Filter Form -->
         <form method="POST" class="subpage">
             <label for="month">Month:</label>
             <select name="month" id="month">
@@ -88,7 +115,6 @@ $result = $conn->query($sql);
             <select name="year" id="year">
                 <option value="">Select Year</option>
                 <?php
-                // Fetch available years from the database
                 $result_years = $conn->query("SELECT DISTINCT YEAR(date) AS year FROM payments ORDER BY year DESC");
                 while ($year_row = $result_years->fetch_assoc()) {
                     $selected = ($year == $year_row['year']) ? 'selected' : '';
@@ -105,7 +131,6 @@ $result = $conn->query($sql);
                 <table>
                     <thead>
                         <tr>
-                            <th>Payment ID</th>
                             <th>Date</th>
                             <th>Amount</th>
                             <th>Payment Method</th>
@@ -115,7 +140,6 @@ $result = $conn->query($sql);
                     <tbody>
                         <?php while ($row = $result->fetch_assoc()): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($row['payment_id']); ?></td>
                                 <td><?php echo htmlspecialchars($row['date']); ?></td>
                                 <td><?php echo htmlspecialchars($row['payment_amount']); ?></td>
                                 <td><?php echo htmlspecialchars($row['payment_method']); ?></td>
@@ -124,6 +148,9 @@ $result = $conn->query($sql);
                         <?php endwhile; ?>
                     </tbody>
                 </table>
+            </div>
+            <div class="total-deposit">
+                <h3>Total Deposit: <?php echo htmlspecialchars($total_deposit); ?></h3>
             </div>
         <?php else: ?>
             <p>No deposit history found for the selected filter.</p>

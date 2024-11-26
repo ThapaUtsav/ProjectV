@@ -46,6 +46,7 @@ $todayDate = date('Y-m-d');
         <div class="submenu" id="reportsSubmenu">
             <a href="monthlyreport.php">Monthly Reports</a>
             <a href="annualreport.php">Annual Reports</a>
+            <a href="../../finance/loanreport.php">Loan Reports </a>
         </div>
 
         <!-- Support and Sign Out -->
@@ -114,10 +115,8 @@ $todayDate = date('Y-m-d');
             <label for="accDate">Created On:</label>
             <input type="date" id="accDate" name="accDate" value="<?php echo $todayDate; ?>" readonly>
 
-            <button type="submit">Submit</button>
+            <button type="submit">Create</button>
         </div>
     </form>
-
-    
 </body>
 </html>

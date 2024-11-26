@@ -1,37 +1,53 @@
 <?php
 session_start();
 
-// Check if the user is logged in and session variable 'userID' is set
 if (!isset($_SESSION['userID']) || empty($_SESSION['userID'])) {
     die("Session expired or user not logged in. Please log in again.");
 }
 
-$admin_account_number = $_SESSION['userID']; // Get the admin account number from the session
-$username = isset($_SESSION['username']) ? $_SESSION['username'] : '';  // Get the username from the session
+$admin_account_number = $_SESSION['userID'];
 
-// Database connection
 $servername = "localhost";
-$dbusername = "root";  // Assuming default username
+$dbusername = "root";
 $password = "";
 $dbname = "arthasanjal";
 
-// Create connection
 $conn = new mysqli($servername, $dbusername, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Get today's date (in Y-m-d format)
 $today_date = date('Y-m-d');
+$current_month = date('m');
+$current_year = date('Y');
 
-// Display the success message if set in the session
-if (isset($_SESSION['deposit_message'])) {
-    echo "<p style='color: green;'>".$_SESSION['deposit_message']."</p>"; // Success message
-    unset($_SESSION['deposit_message']);  // Unset the message after displaying it
+$sql = "SELECT * FROM payments WHERE account_number = '$admin_account_number' AND MONTH(date) = '$current_month' AND YEAR(date) = '$current_year'";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $_SESSION['deposit_message'] = "You have already made a deposit this month.";
+    header("Location: index.php");
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $payment_amount = $_POST['payment_amount'];
+    $payment_method = $_POST['payment_method'];
+
+    $sql = "INSERT INTO payments (account_number, payment_amount, payment_method, date) VALUES ('$admin_account_number', '$payment_amount', '$payment_method', '$today_date')";
+    
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['deposit_message'] = "Deposit successful.";
+    } else {
+        $_SESSION['deposit_message'] = "Error: " . $conn->error;
+    }
+
+    header("Location: index.php");
+    exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -53,13 +69,18 @@ if (isset($_SESSION['deposit_message'])) {
         </div>
         <a href="#" onclick="toggleSubmenu('accountManagementSubmenu')">Account Management</a>
         <div class="submenu" id="accountManagementSubmenu">
-            <a href="index.php">Deposit Amount</a>
-            <a href="loanindex.php">Loan Account Management</a>
+            <a href="index.php">Deposit</a>
+            <a href="loanindex.php">Loan</a>
+        </div>
+        <a href="javascript:void(0);" onclick="toggleSubmenu('loanRepaymentSubmenu')">Repayment</a>
+        <div class="submenu" id="loanRepaymentSubmenu">
+            <a href="../Pages/AdminPage/loan_repayment.php">Loan Repayments</a>
         </div>
         <a href="#" onclick="toggleSubmenu('reportsSubmenu')">Reports</a>
         <div class="submenu" id="reportsSubmenu">
             <a href="../Pages/AdminPage/monthlyreport.php">Monthly Reports</a>
             <a href="../Pages/AdminPage/annualreport.php">Annual Reports</a>
+            <a href="loanreport.php">Loan Reports</a>
         </div>
         <a href="../Pages/AdminPage/help.php">Support/Help</a>
         <a href="../Pages/AdminPage/signout.php">Sign Out</a>
@@ -84,6 +105,7 @@ if (isset($_SESSION['deposit_message'])) {
 
     <!-- Main Content -->
     <h1>Deposit</h1>
+    <div class="subpage">
     <form id="paymentForm" action="submit.php" method="POST">
         <label for="date">Date:</label>
         <input type="date" id="date" name="date" value="<?php echo htmlspecialchars($today_date); ?>" required>
@@ -91,10 +113,10 @@ if (isset($_SESSION['deposit_message'])) {
         <label for="payment">Payment Amount:</label>
         <input type="number" id="payment" name="payment_amount" required>
         
-        <label for="payment_method">Payment Method:</label><br>
+        <label for="payment_method">Payment Method:</label>
         <select id="payment_method" name="payment_method" required>
-            <option value="mobile">Mobile</option>
-            <option value="banking">Banking</option>
+            <option value="mobile">Digital Wallet</option>
+            <option value="banking">Mobile Banking</option>
         </select>
         
         <input type="hidden" name="account_number" value="<?php echo htmlspecialchars($admin_account_number); ?>">
@@ -102,7 +124,7 @@ if (isset($_SESSION['deposit_message'])) {
         
         <button type="submit">Submit</button>
     </form>
-
+    </div>
     <?php
         // Debugging: Check POST data when the form is submitted
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {

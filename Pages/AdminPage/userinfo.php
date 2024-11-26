@@ -113,6 +113,7 @@ if ($result === false) {
         <div class="submenu" id="reportsSubmenu">
             <a href="monthlyreport.php">Monthly Reports</a>
             <a href="annualreport.php">Annual Reports</a>
+            <a href="../../finance/loanreport.php">Loan Reports </a>
         </div>
 
         <!-- Support and Sign Out -->
@@ -182,11 +183,6 @@ if ($result === false) {
 
     <?php $conn->close(); ?>
 </div>
-
-<!-- Footer Section -->
-<footer>
-    &copy; <?php echo date("Y"); ?> Artha Sanjal. All rights reserved.
-</footer>
 
 </body>
 </html>

@@ -329,3 +329,18 @@ body.dark-mode .subpage form textarea {
 .subpage p {
     margin: 10px 0;
 }
+
+.status-pending {
+    color: orange;
+    font-weight: bold;
+}
+
+.status-approved {
+    color: green;
+    font-weight: bold;
+}
+
+.status-rejected {
+    color: red;
+    font-weight: bold;
+}

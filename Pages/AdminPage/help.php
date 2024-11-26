@@ -37,6 +37,7 @@
         <div class="submenu" id="reportsSubmenu">
             <a href="monthlyreport.php">Monthly Reports</a>
             <a href="annualreport.php">Annual Reports</a>
+            <a href="../../finance/loanreport.php">Loan Reports </a>
         </div>
 
         <!-- Support and Sign Out -->

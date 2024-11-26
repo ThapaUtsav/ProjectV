@@ -104,17 +104,41 @@ $conn->close();
         </div>
     </header>
 
-    <div class="profile-container">
+    <div class="subpage">
         <h2>Your Profile</h2>
-        <div class="profile-info">
-            <p><strong>Name:</strong> <?php echo htmlspecialchars($user['name']); ?></p>
-            <p><strong>Username:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
-            <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
-            <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($user['phone']); ?></p>
-            <p><strong>Date of Birth:</strong> <?php echo htmlspecialchars($user['dob']); ?></p>
-            <p><strong>Address:</strong> <?php echo htmlspecialchars($user['street']) . ', ' . htmlspecialchars($user['city']) . ', ' . htmlspecialchars($user['state']); ?></p>
-            <p><strong>Account Created On:</strong> <?php echo htmlspecialchars($user['acc_date']); ?></p>
-        </div>
+    
+        <table class="subpage" align="center">
+            <tr>
+                <th>Name:</th>
+                <td><?php echo htmlspecialchars($user['name']); ?></td>
+            </tr>
+            <tr>
+                <th>Username</th>
+                <td><?php echo htmlspecialchars($user['username']); ?></td>
+            <tr>
+                <th>Email</th>
+                <td><?php echo htmlspecialchars($user['email']); ?></td>
+            </tr>
+            <tr>
+                <th>Phone Number</th>
+                <td><?php echo htmlspecialchars($user['phone']); ?></td>
+            </tr>
+            <tr>
+                <th>Date Of Birth</th>
+                <td><?php echo htmlspecialchars($user['dob']); ?></td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td><?php echo htmlspecialchars($user['street']); ?></td>
+            </tr>
+            <tr>
+                <th>Account Created On</th>
+                <td><?php echo htmlspecialchars($user['acc_date']); ?></td>
+            </tr>
+        </table>
+
+
+
         <form action="profile.php" method="POST">
             <h2>Change Password</h2>
             <label for="current_password">Current Password:</label>

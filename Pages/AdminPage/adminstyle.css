@@ -365,7 +365,7 @@ h2 {
 }
 
 .table thead {
-    background-color: #1a9db6;
+    background-color: #24bfd7;
     color: white;
 }
 
@@ -411,7 +411,7 @@ h2 {
 }
 
 .table thead {
-    background-color: #1a9db6;
+    background-color: #24bfd7;
     color: white;
     text-align: center;
     font-weight: bold;
@@ -449,4 +449,31 @@ footer {
     padding: 10px;
     background-color: #333;
     color: white;
+}
+/* Button Styles */
+.btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+.approve-btn {
+    background-color: #4CAF50; /* Green background */
+    color: white;
+}
+
+.reject-btn {
+    background-color: #f44336; /* Red background */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.reject-btn:hover {
+    background-color: #e53935; /* Darker red for hover effect */
 }

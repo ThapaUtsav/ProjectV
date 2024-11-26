@@ -96,10 +96,7 @@
         </div>
     </div>
     <script src="memscript.js"></script>
-    <!-- Footer Section -->
-    <footer>
-        &copy; <?php echo date("Y");?> Artha Sanjal. All rights reserved.
-    </footer>
+   
     
 </body>
 </html>

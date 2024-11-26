@@ -21,23 +21,33 @@ if ($conn->connect_error) {
 
 $today_date = date('Y-m-d');
 
-// Fetch the user's loans, including the outstanding balance
-$sql = "SELECT loan_id, loan_amount, interest_rate, repayment_period, total_repayment, monthly_repayment, loan_date, status, created_by, outstanding_balance FROM loans WHERE account_number = '$admin_account_number'";
+// Query to check the most recent loan for the user
+$sql = "SELECT * FROM loans WHERE account_number = '$admin_account_number' ORDER BY loan_date DESC LIMIT 1";
 $result = $conn->query($sql);
+
+$has_unpaid_loan = false;
+if ($result->num_rows > 0) {
+    $loan = $result->fetch_assoc();
+    // Check if the loan has not been repaid (you can check for a specific condition like loan_status or repayment_status)
+    // Here, we're assuming that an unpaid loan will have a NULL or 'unpaid' repayment status (or another condition based on your database)
+    if ($loan['loan_status'] != 'paid') {
+        $has_unpaid_loan = true;
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Loan Deposit and Management</title>
-  <link rel="stylesheet" href="indexstyle.css">
-  <script src="script.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Request</title>
+    <link rel="stylesheet" href="indexstyle.css">
+    <script src="script.js"></script>
 </head>
 <body class="light-mode">
 
-    <!-- Sidebar Navigation -->
     <div class="sidebar" id="sidebar">
         <a href="../Pages/AdminPage/admin_page.html">Home</a>
         <a href="javascript:void(0);" onclick="toggleSubmenu('userManagementSubmenu')">User Management</a>
@@ -45,21 +55,25 @@ $result = $conn->query($sql);
             <a href="../Pages/AdminPage/add_user.php">Add New User</a>
             <a href="../Pages/AdminPage/userinfo.php">Manage User Information</a>
         </div>
-        <a href="javascript:void(0);" onclick="toggleSubmenu('accountManagementSubmenu')">Account Management</a>
+        <a href="#" onclick="toggleSubmenu('accountManagementSubmenu')">Account Management</a>
         <div class="submenu" id="accountManagementSubmenu">
-            <a href="index.php">Deposit Amount</a>
-            <a href="loanindex.php">Loan Account Management</a>
+            <a href="index.php">Deposit</a>
+            <a href="loanindex.php">Loan</a>
         </div>
-        <a href="javascript:void(0);" onclick="toggleSubmenu('reportsSubmenu')">Reports</a>
+        <a href="javascript:void(0);" onclick="toggleSubmenu('loanRepaymentSubmenu')">Repayment</a>
+        <div class="submenu" id="loanRepaymentSubmenu">
+            <a href="../Pages/AdminPage/loan_repayment.php">Loan Repayments</a>
+        </div>
+        <a href="#" onclick="toggleSubmenu('reportsSubmenu')">Reports</a>
         <div class="submenu" id="reportsSubmenu">
             <a href="../Pages/AdminPage/monthlyreport.php">Monthly Reports</a>
             <a href="../Pages/AdminPage/annualreport.php">Annual Reports</a>
+            <a href="loanreport.php">Loan Reports</a>
         </div>
         <a href="../Pages/AdminPage/help.php">Support/Help</a>
         <a href="../Pages/AdminPage/signout.php">Sign Out</a>
     </div>
 
-    <!-- Header Section -->
     <header>
         <div class="hamburger-menu" onclick="toggleSidebar()">
             &#9776;
@@ -74,81 +88,44 @@ $result = $conn->query($sql);
         </div>
     </header>
 
-    <!-- Main Content Area -->
-    <div class="home-area">
-        <h1>Loan Deposit</h1>
-        <form id="loanForm" action="submitLoan.php" method="POST">
-            <label for="loan_date">Loan Date:</label>
-            <input type="date" id="loan_date" name="loan_date" value="<?php echo htmlspecialchars($today_date); ?>" required>
-            
-            <label for="loan_amount">Loan Amount:</label>
-            <input type="number" id="loan_amount" name="loan_amount" required>
+    <div class="subpage">
+        <h1>Loan Request</h1>
 
-            <label for="interest_rate">Interest Rate (%):</label>
-            <input type="number" id="interest_rate" name="interest_rate" step="0.1" min="0" required>
+        <?php if ($has_unpaid_loan): ?>
+            <p style="color: red;">You have an unpaid loan. You must pay it off before applying for a new loan.</p>
+        <?php else: ?>
+            <form id="loanForm" action="processLoanRequest.php" method="POST">
+                <label for="loan_date">Loan Date:</label>
+                <input type="date" id="loan_date" name="loan_date" value="<?php echo htmlspecialchars($today_date); ?>" required>
 
-            <label for="repayment_period">Repayment Period (Months):</label>
-            <input type="number" id="repayment_period" name="repayment_period" required>
+                <label for="loan_amount">Loan Amount:</label>
+                <input type="number" id="loan_amount" name="loan_amount" required>
 
-            <label for="payment_method">Payment Method:</label><br>
-            <select id="payment_method" name="payment_method" required>
-                <option value="mobile">Mobile</option>
-                <option value="banking">Banking</option>
-            </select><br>
+                <label for="interest_rate">Interest Rate (%):</label>
+                <input type="number" id="interest_rate" name="interest_rate" step="0.1" min="0" required>
 
-            <label for="total_repayment">Total Repayment (with interest):</label>
-            <input type="text" id="total_repayment" name="total_repayment" readonly>
+                <label for="repayment_period">Repayment Period (Months):</label>
+                <input type="number" id="repayment_period" name="repayment_period" required>
 
-            <label for="monthly_repayment">Monthly Repayment:</label>
-            <input type="text" id="monthly_repayment" name="monthly_repayment" readonly>
+                <label for="payment_method">Payment Method:</label>
+                <select id="payment_method" name="payment_method" required>
+                    <option value="mobile">Digital Wallet</option>
+                    <option value="banking">Mobile Banking</option>
+                </select><br>
 
-            <input type="hidden" name="account_number" value="<?php echo htmlspecialchars($admin_account_number); ?>">
-            <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>">
-            
-            <button type="submit">Submit Loan</button>
-        </form>
+                <label for="total_repayment">Total Repayment (with interest):</label>
+                <input type="text" id="total_repayment" name="total_repayment" readonly>
 
-        <div class="loan-table-container">
-            <h2>Current Loan Accounts</h2>
-            <?php if ($result->num_rows > 0): ?>
-                <table class="loan-table">
-                    <thead>
-                        <tr>
-                            <th>Username</th>
-                            <th>Loan Amount</th>
-                            <th>Interest Rate (%)</th>
-                            <th>Repayment Period (Months)</th>
-                            <th>Total Repayment</th>
-                            <th>Monthly Repayment</th>
-                            <th>Outstanding Balance</th> 
-                            <th>Status</th>
-                            <th>Loan Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php while($row = $result->fetch_assoc()): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($row['created_by']); ?></td>
-                                <td><?php echo htmlspecialchars($row['loan_amount']); ?></td>
-                                <td><?php echo htmlspecialchars($row['interest_rate']); ?></td>
-                                <td><?php echo htmlspecialchars($row['repayment_period']); ?></td>
-                                <td><?php echo htmlspecialchars($row['total_repayment']); ?></td>
-                                <td><?php echo htmlspecialchars($row['monthly_repayment']); ?></td>
-                                <td><?php echo htmlspecialchars($row['outstanding_balance']); ?></td>
-                                <td class="status <?php echo strtolower($row['status']); ?>">
-                                    <?php echo htmlspecialchars($row['status']); ?>
-                                </td>
-                                <td><?php echo htmlspecialchars($row['loan_date']); ?></td>
-                            </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
-            <?php else: ?>
-                <p>No loan accounts found.</p>
-            <?php endif; ?>
-        </div>
+                <label for="monthly_repayment">Monthly Repayment:</label>
+                <input type="text" id="monthly_repayment" name="monthly_repayment" readonly>
+
+                <input type="hidden" name="account_number" value="<?php echo htmlspecialchars($admin_account_number); ?>">
+                <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>">
+
+                <button type="submit">Submit Loan Request</button>
+            </form>
+        <?php endif; ?>
     </div>
-
 
     <script>
         document.getElementById("loan_amount").addEventListener("input", calculateLoan);

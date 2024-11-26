@@ -93,6 +93,7 @@ $conn->close();
         <a href="javascript:void(0);" onclick="toggleSubmenu('services')">Services</a>
         <div class="submenu" id="services">
             <a href="reqaccstatement.php">Loan Repayment</a>
+            <a href="DepHist.php">Deposit History</a>
         </div>
     
         <!-- Support and Sign Out -->
@@ -114,7 +115,7 @@ $conn->close();
         </div>
     </header>
 
-    <div class="home-area">
+    <div >
         <h2>Loan Repayment</h2>
 
         <?php if (isset($error_message)): ?>
@@ -124,9 +125,9 @@ $conn->close();
         <?php if (isset($success_message)): ?>
             <p style="color: green;"><?php echo $success_message; ?></p>
         <?php endif; ?>
-
+        <div class="subpage">
         <h3>Loan Details</h3>
-        <table>
+        <table class="subpage" align="center">
             <tr>
                 <th>Loan Amount</th>
                 <td><?php echo htmlspecialchars($loan['loan_amount']); ?></td>
@@ -152,7 +153,6 @@ $conn->close();
                 <td><?php echo htmlspecialchars($loan['status']); ?></td>
             </tr>
         </table>
-
         <h3>Make Repayment</h3>
         <form action="reqaccstatement.php" method="POST">
             <label for="repayment_amount">Repayment Amount (Max: <?php echo $loan['monthly_repayment']; ?>):</label>
@@ -161,10 +161,8 @@ $conn->close();
             <button type="submit">Make Repayment</button>
         </form>
     </div>
-
-    <footer>
-        &copy; <?php echo date("Y"); ?> Artha Sanjal. All rights reserved.
-    </footer>
+    </div>
+    
 
 </body>
 </html>
