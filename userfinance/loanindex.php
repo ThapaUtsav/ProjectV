@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+// Check if the user is logged in
 if (!isset($_SESSION['userID']) || empty($_SESSION['userID'])) {
     die("Session expired or user not logged in. Please log in again.");
 }
@@ -13,10 +14,26 @@ $dbusername = "root";
 $password = "";
 $dbname = "arthasanjal";
 
+// Create a connection to the database
 $conn = new mysqli($servername, $dbusername, $password, $dbname);
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
+}
+
+// Check if the user has any unpaid loans
+$sql_check_loans = "SELECT * FROM loans WHERE created_by = ? AND status != 'Paid'";
+$stmt_check = $conn->prepare($sql_check_loans);
+$stmt_check->bind_param("s", $admin_account_number);
+$stmt_check->execute();
+$result_check = $stmt_check->get_result();
+
+// If the user has an unpaid loan, prevent loan request
+if ($result_check->num_rows > 0) {
+    // Set a flag to show the alert and prevent loan form
+    $has_unpaid_loans = true;
+} else {
+    $has_unpaid_loans = false;
 }
 
 $today_date = date('Y-m-d');
@@ -25,6 +42,8 @@ if (isset($_SESSION['deposit_message'])) {
     echo "<p style='color: green;'>".$_SESSION['deposit_message']."</p>";
     unset($_SESSION['deposit_message']);
 }
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -36,24 +55,22 @@ if (isset($_SESSION['deposit_message'])) {
   <link rel="stylesheet" href="usstyle.css">
 </head>
 <body class="light-mode">
+
     <!-- Sidebar Navigation -->
     <div class="sidebar" id="sidebar">
         <a href="../Pages/MemberPage/memberpage.html">Home</a>
         <a href="../Pages/MemberPage/profile.php">My Profile</a>
-
-        <a href="javascript:void(0);" onclick="toggleSubmenu('account-information')">Account Information</a>
-        <div class="submenu" id="account-information">
-            <a href="../../userfinance/index.php">Deposit Amount</a>
-            <a href="loanSubmit.php">Loan Amount</a>
+        <a href="#" onclick="toggleSubmenu('accountManagementSubmenu')">Account Information</a>
+        <div class="submenu" id="accountManagementSubmenu">
+            <a href="index.php">Deposit</a>
+            <a href="loanindex.php">Loan</a>
         </div>
-
-        <a href="javascript:void(0);" onclick="toggleSubmenu('services')">Services</a>
-        <div class="submenu" id="services">
-            <a href="../Pages/MemberPage/reqaccstatement.php">Account Statement</a>
-            <a href="../Pages/MemberPage/reqaccstatement.php">Loan Repayment</a>
+        <a href="#" onclick="toggleSubmenu('reportsSubmenu')">Services</a>
+        <div class="submenu" id="reportsSubmenu">
+        <a href="../Pages/AdminPage/reqaccstatement.php">Loan Repayments</a>
+            <a href="../Pages/MemberPage/DepHist.php">Deposit History</a>
         </div>
-
-        <a href="../Pages/MemberPage/support.php">Support/Help</a>
+        <a href="../Pages/MemberPage/help.php">Support/Help</a>
         <a href="../Pages/MemberPage/signout.php">Sign Out</a>
     </div>
 
@@ -73,7 +90,17 @@ if (isset($_SESSION['deposit_message'])) {
     <!-- Loan Request Form Section -->
     <h1>Request Loan</h1>
     <div class="subpage">
-        <form id="loanForm" action="submitLoan.php" method="POST">
+
+        <?php if ($has_unpaid_loans): ?>
+            <!-- Show an alert if the user has an unpaid loan -->
+            <script>
+                alert("You have an unpaid loan. Please settle the previous loan before requesting a new one.");
+                window.location.href = '../Pages/MemberPage/memberpage.html'; // Redirect to home page
+            </script>
+        <?php endif; ?>
+
+        <!-- Loan Request Form (Only visible if no unpaid loans) -->
+        <form id="loanForm" action="submitLoan.php" method="POST" <?php echo $has_unpaid_loans ? 'style="display:none;"' : ''; ?>>
             <label for="loan_date">Loan Date:</label>
             <input type="date" id="loan_date" name="loan_date" value="<?php echo htmlspecialchars($today_date); ?>" required>
             
@@ -125,6 +152,6 @@ if (isset($_SESSION['deposit_message'])) {
         }
         
     </script>
- <script src="../../Page/MemberPage/memscript.js"></script>
+ <script src="userfscript.js" defer></script>
 </body>
 </html>

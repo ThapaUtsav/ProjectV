@@ -25,15 +25,6 @@ $today_date = date('Y-m-d');
 $sql = "SELECT * FROM loans WHERE account_number = '$admin_account_number' ORDER BY loan_date DESC LIMIT 1";
 $result = $conn->query($sql);
 
-$has_unpaid_loan = false;
-if ($result->num_rows > 0) {
-    $loan = $result->fetch_assoc();
-    // Check if the loan has not been repaid (you can check for a specific condition like loan_status or repayment_status)
-    // Here, we're assuming that an unpaid loan will have a NULL or 'unpaid' repayment status (or another condition based on your database)
-    if ($loan['loan_status'] != 'paid') {
-        $has_unpaid_loan = true;
-    }
-}
 
 ?>
 
@@ -79,7 +70,7 @@ if ($result->num_rows > 0) {
             &#9776;
         </div>
         <div class="nav-links">
-            <a href="#">Notifications</a>
+            <a href="../Pages/AdminPage/notification.php">Notifications</a>
             <div class="theme-link" onclick="toggleThemeDropdown()">Theme</div>
             <div class="theme-dropdown" id="theme-dropdown">
                 <a href="#" onclick="switchMode('light')">Light Mode</a>
@@ -90,11 +81,7 @@ if ($result->num_rows > 0) {
 
     <div class="subpage">
         <h1>Loan Request</h1>
-
-        <?php if ($has_unpaid_loan): ?>
-            <p style="color: red;">You have an unpaid loan. You must pay it off before applying for a new loan.</p>
-        <?php else: ?>
-            <form id="loanForm" action="processLoanRequest.php" method="POST">
+            <form id="loanForm" action="submitloan.php" method="POST">
                 <label for="loan_date">Loan Date:</label>
                 <input type="date" id="loan_date" name="loan_date" value="<?php echo htmlspecialchars($today_date); ?>" required>
 
@@ -109,8 +96,8 @@ if ($result->num_rows > 0) {
 
                 <label for="payment_method">Payment Method:</label>
                 <select id="payment_method" name="payment_method" required>
-                    <option value="mobile">Digital Wallet</option>
-                    <option value="banking">Mobile Banking</option>
+                    <option value="EWallet">Digital Wallet</option>
+                    <option value="Banking">Mobile Banking</option>
                 </select><br>
 
                 <label for="total_repayment">Total Repayment (with interest):</label>
@@ -124,7 +111,6 @@ if ($result->num_rows > 0) {
 
                 <button type="submit">Submit Loan Request</button>
             </form>
-        <?php endif; ?>
     </div>
 
     <script>

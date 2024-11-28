@@ -19,7 +19,8 @@ $selectedUsername = isset($_GET['username']) ? $_GET['username'] : '';
 $yearsSql = "SELECT DISTINCT YEAR(date) AS year FROM payments ORDER BY year DESC";
 $yearsResult = $conn->query($yearsSql);
 
-$sql = "SELECT * FROM payments WHERE MONTH(date) = ? AND YEAR(date) = ?";
+// Modify the SQL query to only select 'approve' payments
+$sql = "SELECT * FROM payments WHERE MONTH(date) = ? AND YEAR(date) = ? AND remarks = 'approve'";
 $params = [$selectedMonth, $selectedYear];
 
 if ($selectedUsername) {
@@ -71,7 +72,7 @@ $usernamesResult = $conn->query($usernamesSql);
         <a href="javascript:void(0);" onclick="toggleSubmenu('accountManagementSubmenu')">Account Management</a>
         <div class="submenu" id="accountManagementSubmenu">
             <a href="../../finance/index.php">Deposit </a>
-            <a href="../../finance/loanindex.php">Loan </a>
+            <a href="../finance/loanindex.php">Loan </a>
         </div>
         <a href="javascript:void(0);" onclick="toggleSubmenu('loanRepaymentSubmenu')">Repayment</a>
         <div class="submenu" id="loanRepaymentSubmenu">

@@ -34,22 +34,23 @@ if (isset($_SESSION['deposit_message'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Payment Table</title>
   <link rel="stylesheet" href="usstyle.css">
+  <script src="userfscript.js" defer></script>
 </head>
 <body class="light-mode">
-    <div class="sidebar" id="sidebar">
+<div class="sidebar" id="sidebar">
         <a href="../Pages/MemberPage/memberpage.html">Home</a>
         <a href="../Pages/MemberPage/profile.php">My Profile</a>
-        <a href="javascript:void(0);" onclick="toggleSubmenu('account-information')">Account Information</a>
-        <div class="submenu" id="account-information">
-            <a href="../../userfinance/index.php">Deposit </a>
-            <a href="loanindex.php">Loan </a>
+        <a href="#" onclick="toggleSubmenu('accountManagementSubmenu')">Account Information</a>
+        <div class="submenu" id="accountManagementSubmenu">
+            <a href="index.php">Deposit</a>
+            <a href="loanindex.php">Loan</a>
         </div>
-        <a href="javascript:void(0);" onclick="toggleSubmenu('services')">Services</a>
-        <div class="submenu" id="services">
-            <a href="../Pages/MemberPage/reqaccstatement.php">Account Statement</a>
-            <a href="../Pages/MemberPage/reqaccstatement.php">Loan Repayment</a>
+        <a href="#" onclick="toggleSubmenu('reportsSubmenu')">Services</a>
+        <div class="submenu" id="reportsSubmenu">
+        <a href="../Pages/AdminPage/reqaccstatement.php">Loan Repayments</a>
+            <a href="../Pages/MemberPage/DeptHist.php">Deposit History</a>
         </div>
-        <a href="../Pages/MemberPage/support.php">Support/Help</a>
+        <a href="../Pages/MemberPage/help.php">Support/Help</a>
         <a href="../Pages/MemberPage/signout.php">Sign Out</a>
     </div>
 
@@ -97,6 +98,5 @@ if (isset($_SESSION['deposit_message'])) {
     ?>
     </div>
 
-    <script src="../../Pages/MemberPage/memscript.js"></script>
 </body>
 </html>

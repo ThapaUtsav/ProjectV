@@ -25,12 +25,6 @@ $current_year = date('Y');
 $sql = "SELECT * FROM payments WHERE account_number = '$admin_account_number' AND MONTH(date) = '$current_month' AND YEAR(date) = '$current_year'";
 $result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
-    $_SESSION['deposit_message'] = "You have already made a deposit this month.";
-    header("Location: index.php");
-    exit();
-}
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $payment_amount = $_POST['payment_amount'];
     $payment_method = $_POST['payment_method'];
@@ -92,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             &#9776;
         </div>
         <div class="nav-links">
-            <a href="#">Notifications</a>
+            <a href="../Pages/AdminPage/notification.php">Notifications</a>
             <div class="theme-link" onclick="toggleThemeDropdown()">
                 Theme
             </div>
@@ -120,18 +114,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </select>
         
         <input type="hidden" name="account_number" value="<?php echo htmlspecialchars($admin_account_number); ?>">
-        <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>"> <!-- Store username but don't display it -->
-        
+        <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>"> 
         <button type="submit">Submit</button>
     </form>
     </div>
-    <?php
-        // Debugging: Check POST data when the form is submitted
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            echo "<pre>";
-            print_r($_POST);
-            echo "</pre>";
-        }
-    ?>
 </body>
 </html>

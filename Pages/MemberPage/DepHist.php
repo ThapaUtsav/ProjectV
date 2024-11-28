@@ -21,10 +21,8 @@ $userID = $_SESSION['userID'];
 $month = isset($_POST['month']) ? $_POST['month'] : '';
 $year = isset($_POST['year']) ? $_POST['year'] : '';
 
-// Default query to fetch all deposits
-$sql = "SELECT * FROM payments WHERE account_number = '$userID'";
-
-// Modify query to include filters for month and year
+// Default query to fetch all deposits, excluding those with "rejected" in remarks
+$sql = "SELECT * FROM payments WHERE account_number = '$userID' AND remarks NOT LIKE '%rejecte%'";
 if ($month && $year) {
     $sql .= " AND MONTH(date) = '$month' AND YEAR(date) = '$year'";
 } elseif ($month) {
@@ -37,8 +35,7 @@ $sql .= " ORDER BY date DESC";  // Order by most recent deposit
 
 $result = $conn->query($sql);
 
-// Calculate total deposit based on the filter
-$total_sql = $sql; // Same as the main query
+$total_sql = $sql; 
 $total_result = $conn->query($total_sql);
 $total_deposit = 0;
 if ($total_result && $total_result->num_rows > 0) {

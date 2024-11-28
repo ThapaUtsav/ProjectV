@@ -44,7 +44,7 @@ $selectedUsername = isset($_GET['username']) ? $_GET['username'] : '';
 
 // Build the query based on selected year and username
 $sql = "SELECT username, payment_amount, date, payment_method, remarks 
-        FROM payments WHERE YEAR(date) = ?";
+        FROM payments WHERE YEAR(date) = ? AND remarks = 'approve'"; // Filter by 'approve'
 
 $params = [$selectedYear];
 

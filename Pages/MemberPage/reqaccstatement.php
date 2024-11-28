@@ -1,11 +1,11 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['userID']) || empty($_SESSION['userID'])) {
+if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
     die("Session expired or user not logged in. Please log in again.");
 }
 
-$user_account_number = $_SESSION['userID'];
+$user_account_number = $_SESSION['username'];
 
 $servername = "localhost";
 $dbusername = "root";
@@ -14,14 +14,19 @@ $dbname = "arthasanjal";
 
 $conn = new mysqli($servername, $dbusername, $password, $dbname);
 
+// Enable error reporting for better debugging
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT * FROM loans WHERE account_number = '$user_account_number' AND status != 'Paid' ORDER BY loan_date DESC";
-$result = $conn->query($sql);
+// Use a prepared statement to protect against SQL injection
+$sql = "SELECT * FROM loans WHERE created_by = ? AND status != 'Paid' ORDER BY loan_date DESC";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $user_account_number);
+$stmt->execute();
+$result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $loan = $result->fetch_assoc();
@@ -39,26 +44,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['repayment_amount'])) {
     } else {
         $repayment_date = date('Y-m-d');
 
+        // Insert repayment record
         $stmt = $conn->prepare("INSERT INTO repayments (loan_id, repayment_amount, repayment_date) VALUES (?, ?, ?)");
-        if (!$stmt) {
-            die("Failed to prepare the statement. Error: " . $conn->error);
-        }
-
         $stmt->bind_param("iis", $loan_id, $repayment_amount, $repayment_date);
         $stmt->execute();
 
+        // Calculate remaining repayment
         $remaining_repayment = $loan['total_repayment'] - $repayment_amount;
-        if ($remaining_repayment <= 0) {
-            $stmt = $conn->prepare("UPDATE loans SET status = 'Paid' WHERE loan_id = ?");
-            if (!$stmt) {
-                die("Failed to prepare the update statement. Error: " . $conn->error);
-            }
 
+        if ($remaining_repayment <= 0) {
+            // Mark the loan as paid
+            $stmt = $conn->prepare("UPDATE loans SET status = 'Paid' WHERE loan_id = ?");
             $stmt->bind_param("i", $loan_id);
             $stmt->execute();
+            $success_message = "Repayment successfully made, loan is now paid off!";
+        } else {
+            $success_message = "Repayment successfully made!";
         }
 
-        $success_message = "Repayment successfully made!";
         $stmt->close();
     }
 }
@@ -78,54 +81,55 @@ $conn->close();
 <body class="light-mode">
 
 <div class="sidebar" id="sidebar">
-        <!-- Home and Profile -->
-        <a href="memberpage.html">Home</a>
-        <a href="profile.php">My Profile</a>
-    
-        <!-- Account Information with Submenu -->
-        <a href="javascript:void(0);" onclick="toggleSubmenu('account-information')">Account Information</a>
-        <div class="submenu" id="account-information">
-            <a href="../../userfinance/index.php">Deposit Amount</a>
-            <a href="../../userfinance/loanindex.php">Loan Amount</a>
-        </div>
-    
-        <!-- Services with Submenu -->
-        <a href="javascript:void(0);" onclick="toggleSubmenu('services')">Services</a>
-        <div class="submenu" id="services">
-            <a href="reqaccstatement.php">Loan Repayment</a>
-            <a href="DepHist.php">Deposit History</a>
-        </div>
-    
-        <!-- Support and Sign Out -->
-        <a href="support.php">Support/Help</a>
-        <a href="signout.php">Sign Out</a>
+    <!-- Home and Profile -->
+    <a href="memberpage.html">Home</a>
+    <a href="profile.php">My Profile</a>
+
+    <!-- Account Information with Submenu -->
+    <a href="javascript:void(0);" onclick="toggleSubmenu('account-information')">Account Information</a>
+    <div class="submenu" id="account-information">
+        <a href="../../userfinance/index.php">Deposit</a>
+        <a href="../../userfinance/loanindex.php">Loan</a>
     </div>
 
-    <header>
-        <div class="hamburger-menu" onclick="toggleSidebar()">
-            &#9776;
+    <!-- Services with Submenu -->
+    <a href="javascript:void(0);" onclick="toggleSubmenu('services')">Services</a>
+    <div class="submenu" id="services">
+        <a href="reqaccstatement.php">Loan Repayment</a>
+        <a href="DepHist.php">Deposit History</a>
+    </div>
+
+    <!-- Support and Sign Out -->
+    <a href="support.php">Support/Help</a>
+    <a href="signout.php">Sign Out</a>
+</div>
+
+<header>
+    <div class="hamburger-menu" onclick="toggleSidebar()">
+        &#9776;
+    </div>
+    <div class="nav-links">
+        <a href="notification.php">Notifications</a>
+        <div class="theme-link" onclick="toggleThemeDropdown()">Theme</div>
+        <div class="theme-dropdown" id="theme-dropdown">
+            <a href="#" onclick="switchMode('light')">Light Mode</a>
+            <a href="#" onclick="switchMode('dark')">Dark Mode</a>
         </div>
-        <div class="nav-links">
-            <a href="notification.php">Notifications</a>
-            <div class="theme-link" onclick="toggleThemeDropdown()">Theme</div>
-            <div class="theme-dropdown" id="theme-dropdown">
-                <a href="#" onclick="switchMode('light')">Light Mode</a>
-                <a href="#" onclick="switchMode('dark')">Dark Mode</a>
-            </div>
-        </div>
-    </header>
+    </div>
+</header>
 
-    <div >
-        <h2>Loan Repayment</h2>
+<div>
+    <h2>Loan Repayment</h2>
 
-        <?php if (isset($error_message)): ?>
-            <p style="color: red;"><?php echo $error_message; ?></p>
-        <?php endif; ?>
+    <?php if (isset($error_message)): ?>
+        <p style="color: red;"><?php echo $error_message; ?></p>
+    <?php endif; ?>
 
-        <?php if (isset($success_message)): ?>
-            <p style="color: green;"><?php echo $success_message; ?></p>
-        <?php endif; ?>
-        <div class="subpage">
+    <?php if (isset($success_message)): ?>
+        <p style="color: green;"><?php echo $success_message; ?></p>
+    <?php endif; ?>
+
+    <div class="subpage">
         <h3>Loan Details</h3>
         <table class="subpage" align="center">
             <tr>
@@ -153,6 +157,7 @@ $conn->close();
                 <td><?php echo htmlspecialchars($loan['status']); ?></td>
             </tr>
         </table>
+
         <h3>Make Repayment</h3>
         <form action="reqaccstatement.php" method="POST">
             <label for="repayment_amount">Repayment Amount (Max: <?php echo $loan['monthly_repayment']; ?>):</label>
@@ -161,8 +166,7 @@ $conn->close();
             <button type="submit">Make Repayment</button>
         </form>
     </div>
-    </div>
-    
+</div>
 
 </body>
 </html>

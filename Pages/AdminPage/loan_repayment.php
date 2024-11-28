@@ -1,11 +1,11 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['userID']) || empty($_SESSION['userID'])) {
+if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
     die("Session expired or user not logged in. Please log in again.");
 }
 
-$user_account_number = $_SESSION['userID'];
+$username = $_SESSION['username'];
 
 $servername = "localhost";
 $dbusername = "root";
@@ -14,13 +14,11 @@ $dbname = "arthasanjal";
 
 $conn = new mysqli($servername, $dbusername, $password, $dbname);
 
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT * FROM loans WHERE account_number = '$user_account_number' AND status != 'Paid' ORDER BY loan_date DESC";
+$sql = "SELECT * FROM loans WHERE created_by = '$username' AND status != 'Paid' ORDER BY loan_date DESC";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -59,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['repayment_amount'])) {
         }
 
         $success_message = "Repayment successfully made!";
+        echo "<script>alert('$success_message'); window.location.href = 'admin_page.html';</script>";
         $stmt->close();
     }
 }
@@ -87,8 +86,8 @@ $conn->close();
 
         <a href="javascript:void(0);" onclick="toggleSubmenu('accountManagementSubmenu')">Account Management</a>
         <div class="submenu" id="accountManagementSubmenu">
-            <a href="../../finance/index.php">Deposit Amount</a>
-            <a href="../../finance/loanindex.php">Loan Account Management</a>
+            <a href="../../finance/index.php">Deposit </a>
+            <a href="../../finance/loanindex.php">Loan </a>
         </div>
 
         <a href="javascript:void(0);" onclick="toggleSubmenu('loanRepaymentSubmenu')">Loan Repayment</a>
@@ -100,6 +99,7 @@ $conn->close();
         <div class="submenu" id="reportsSubmenu">
             <a href="monthlyreport.php">Monthly Reports</a>
             <a href="annualreport.php">Annual Reports</a>
+            <a href="../../finance/loanreport.php">Loan Reports</a>
         </div>
 
         <a href="help.php">Support/Help</a>
@@ -125,10 +125,6 @@ $conn->close();
 
         <?php if (isset($error_message)): ?>
             <p style="color: red;"><?php echo $error_message; ?></p>
-        <?php endif; ?>
-
-        <?php if (isset($success_message)): ?>
-            <p style="color: green;"><?php echo $success_message; ?></p>
         <?php endif; ?>
 
         <h3>Loan Details</h3>
@@ -160,7 +156,7 @@ $conn->close();
         </table>
 
         <h3>Make Repayment</h3>
-        <form action="loan_repayment.php" method="POST" >
+        <form action="loan_repayment.php" method="POST">
             <label for="repayment_amount">Repayment Amount (Max: <?php echo $loan['monthly_repayment']; ?>):</label>
             <input type="number" id="repayment_amount" name="repayment_amount" min="0" max="<?php echo $loan['monthly_repayment']; ?>" step="any" required>
 
@@ -168,6 +164,5 @@ $conn->close();
         </form>
     </div>
 
-    
 </body>
 </html>

@@ -22,7 +22,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql_deposits = "SELECT * FROM payments WHERE remarks IS NULL OR remarks = ''";
+$sql_deposits = "SELECT * FROM payments WHERE remarks IS NULL OR remarks = '' OR remarks='0'";
 $result_deposits = $conn->query($sql_deposits);
 $sql_loans = "SELECT * FROM loans WHERE status = 'Pending' OR status IS NULL";
 $result_loans = $conn->query($sql_loans);
@@ -51,7 +51,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pending Approvals</title>
+    <title>Notification</title>
     <link rel="stylesheet" href="adminstyle.css">
     <script src="script.js"></script>
 </head>
